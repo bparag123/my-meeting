@@ -2,9 +2,11 @@ import {
   useMeetingManager
 } from 'amazon-chime-sdk-component-library-react';
 import { useRef, useEffect, useState } from 'react';
-import { MeetingSessionConfiguration } from 'amazon-chime-sdk-js';
+import { MeetingSessionConfiguration, Transcript, TranscriptEvent } from 'amazon-chime-sdk-js';
 import { Controlls } from './components/controlls';
 import MeetingView from "./components/meeting.js";
+import Canvas from './components/whiteBoard';
+// import WhiteBoard from './components/whiteBoard';
 
 
 function App() {
@@ -64,6 +66,20 @@ function App() {
 
     //Binding the Observer
     meetingManager.audioVideo.addObserver(observer)
+
+    //starting transcription
+    const transcriptEventHandler = (transcriptEvent) => {
+      console.log(transcriptEvent)
+    }
+    meetingManager.audioVideo.transcriptionController.subscribeToTranscriptEvent(transcriptEventHandler)
+
+    //realTime Data Listener
+    meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('Drawing', (data) => {
+      // meetingManager.audioVideo.addVideoTile();
+      // Here I need to bind the Canvas as a video Tile
+      console.log(data)
+    })
+
     // Start the session to join the meeting
     await meetingManager.start();
   }
@@ -88,10 +104,11 @@ function App() {
         </div>
       </div> */}
       {/* <Controlls meetingManager={meetingManager} /> */}
-      <MeetingView>
+      <MeetingView meetingManager={meetingManager}>
         <Controlls meetingManager={meetingManager} />
+        <Canvas meetingManager={meetingManager} />
       </MeetingView>
-
+      {/* <Canvas /> */}
     </>
   );
 }

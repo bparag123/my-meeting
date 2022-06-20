@@ -41,6 +41,37 @@ export const createMeeting = async (req, res, next) => {
       }
    }).promise()
 
+   // starting transcription
+   const trans = await chimeSDKMeetings.startMeetingTranscription({
+      MeetingId: result.MeetingId,
+      TranscriptionConfiguration: {
+         "EngineTranscribeSettings": {
+            "LanguageCode": "en-US",
+            "VocabularyFilterMethod": "tag",
+            "VocabularyFilterName": "profanity",
+            "VocabularyName": "lingo",
+            "Region": "us-east-1",
+            "EnablePartialResultsStabilization": true,
+            "PartialResultsStability": "high",
+            "ContentIdentificationType": "PII",
+            "ContentRedactionType": "PII",
+            "PiiEntityTypes": "ALL",
+            "LanguageModelName": "language-model"
+         }
+      }
+   }).promise()
+
+   console.log(trans)
+
+
+   //Creating Media Capture Pipeline
+   // const mediaPipeLine = new AWS.ChimeSDKMediaPipelines({
+   //    region: 'us-east-1'
+   // })
+   // mediaPipeLine.createMediaCapturePipeline({
+
+   // }).promise()
+
    //Getting Meeting Data
    const meetingData = await chimeSDKMeetings.getMeeting({
       MeetingId: result.MeetingId

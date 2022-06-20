@@ -1,0 +1,8 @@
+#canvas {
+  color: black;
+  background-color: white;
+  height: 80vh;
+  width: 80vw;
+  cursor: crosshair;
+  border: 1px solid black;
+}

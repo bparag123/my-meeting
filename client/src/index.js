@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from 'styled-components'
 import { lightTheme, MeetingProvider, } from 'amazon-chime-sdk-component-library-react'
+// import WhiteBoard from './components/whiteBoard';
 // import MeetingView from './components/meeting';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,6 +14,7 @@ root.render(
     <MeetingProvider>
       <App />
     </MeetingProvider>
+    {/* <WhiteBoard /> */}
   </ThemeProvider>
 );
 

@@ -1,11 +1,14 @@
 import { ContentShare, LocalVideo, RemoteVideo, useContentShareState, useLocalVideo, useMeetingManager, useRemoteVideoTileState, VideoGrid, VideoTile } from 'amazon-chime-sdk-component-library-react';
 import classes from './meeting.module.css'
 
-const MeetingView = ({ children }) => {
+const MeetingView = ({ children, meetingManager }) => {
     //Getting all the remote attende tile state
     const { tiles, tileIdToAttendeeId } = useRemoteVideoTileState();
 
-    const meetingManager = useMeetingManager()
+    // const meetingManager = useMeetingManager()
+    if (meetingManager.audioVideo) {
+        console.log(meetingManager.audioVideo.getAllVideoTiles())
+    }
 
     //Creating remote video elements for all the remote attendees
     const videos = tiles.map(tileId => {

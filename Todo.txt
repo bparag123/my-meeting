@@ -1,0 +1,9 @@
+1. Recording
+    For this i need to setup s3 Bucket and Start Media Capture 
+
+2. WhiteBoard
+    For this i need to create a canvas and send the data over the webRTC to peer clients
+
+3. Transcription
+    For this is i created the transcription at the backend side and need to listen at the client side
+    and display the text which is translated. 

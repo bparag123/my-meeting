@@ -78,9 +78,9 @@ export const Controlls = ({ meetingManager }) => {
     const leaveMeetingButtonProps = {
         icon: <LeaveMeeting />,
         onClick: async () => {
-            // meetingManager.audioVideo.stopLocalVideoTile()
-            // meetingManager.audioVideo.stop()
-            // meetingManager.leave()
+            meetingManager.audioVideo.stopLocalVideoTile()
+            meetingManager.audioVideo.stop()
+            meetingManager.leave()
             console.log("Leaving Meeting");
         },
         label: "Leave"
@@ -103,11 +103,19 @@ export const Controlls = ({ meetingManager }) => {
         label: 'Share'
     };
 
+    const whiteBoardProps = {
+        icon: screenShared ? <Clear /> : <ScreenShare />,
+        onClick: () => {
+            //setting up the realTimeMessage
+            // meetingManager.audioVideo.realtimeSendDataMessage('Drawing', ["Hi", "Bye"])
+        },
+        label: 'White Board'
+    }
     return (
         <ControlBar showLabels layout="bottom">
             <ControlBarButton {...microphoneButtonProps} />
             <ControlBarButton {...cameraButtonProps} />
-            {/* <ControlBarButton {...dialButtonProps} /> */}
+            <ControlBarButton {...whiteBoardProps} />
             <ControlBarButton {...screenShareButtonProps} />
             <ControlBarButton {...hangUpButtonProps} />
             <ControlBarButton {...leaveMeetingButtonProps} />
