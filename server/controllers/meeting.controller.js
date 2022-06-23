@@ -78,6 +78,10 @@ export const createMeeting = async (req, res, next) => {
    }).promise()
 
 
+   // Getting all Meetings
+   // const c = new AWS.Chime({ region: 'us-east-1' })
+   // c.crea
+
    //Getting All the attendee in a Meeting
 
    const listAttendee = await chimeSDKMeetings.listAttendees({

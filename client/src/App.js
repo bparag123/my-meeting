@@ -5,18 +5,18 @@ import { useRef, useEffect, useState } from 'react';
 import { MeetingSessionConfiguration, Transcript, TranscriptEvent } from 'amazon-chime-sdk-js';
 import { Controlls } from './components/controlls';
 import MeetingView from "./components/meeting.js";
-import Canvas from './components/whiteBoard';
-// import WhiteBoard from './components/whiteBoard';
 
+// import WhiteBoard from './components/whiteBoard';
 
 function App() {
   const meetingManager = useMeetingManager();
-  const audioEle = useRef(null)
-  const videoEle = useRef(null)
-  const nameRef = useRef(null)
-  const meetingRef = useRef(null)
-  const [audioDev, setAudioDev] = useState("")
-  const [videoDev, setVideoDev] = useState("")
+  const audioEle = useRef(null);
+  const videoEle = useRef(null);
+  const nameRef = useRef(null);
+  const meetingRef = useRef(null);
+  const [audioDev, setAudioDev] = useState("");
+  const [videoDev, setVideoDev] = useState("");
+  const [showWhiteBoard, setShowWhiteBoard] = useState(false);
 
   useEffect(() => {
     setAudioDev(_ => audioEle.current)
@@ -32,10 +32,10 @@ function App() {
     // Initalize the `MeetingSessionConfiguration`
     const meetingSessionConfiguration = new MeetingSessionConfiguration(data.Meeting, data.Attendee);
     // Use the join API to create a meeting session using the MeetingSessionConfiguration
+
     await meetingManager.join(
       meetingSessionConfiguration
     );
-
     //Configuration of device for attending Meeting
     meetingManager.audioVideo.setDeviceLabelTrigger(async () =>
       await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
@@ -64,6 +64,9 @@ function App() {
       }
     }
 
+    meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage("showWhiteboard", (data) => {
+      setShowWhiteBoard(_ => data.json())
+    })
     //Binding the Observer
     meetingManager.audioVideo.addObserver(observer)
 
@@ -73,14 +76,8 @@ function App() {
     }
     meetingManager.audioVideo.transcriptionController.subscribeToTranscriptEvent(transcriptEventHandler)
 
-    //realTime Data Listener
-    meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('Drawing', (data) => {
-      // meetingManager.audioVideo.addVideoTile();
-      // Here I need to bind the Canvas as a video Tile
-      console.log(data)
-    })
-
     // Start the session to join the meeting
+
     await meetingManager.start();
   }
 
@@ -92,23 +89,10 @@ function App() {
       <input id="meeting" type="text" ref={meetingRef}></input>
       <button onClick={joinMeeting}>Join</button>
       <audio style={{ display: "none" }} ref={audioEle}></audio>
-      {/* <div className={classes['meeting-wrapper']}>
-        <div>
-          <video className={classes['local']} ref={videoEle}></video>
-        </div>
-        <div className={classes['gridVideo']} >
-          <VideoTileGrid
-            layout='standard'
-            noRemoteVideoView='No Other Attendees'
-          />
-        </div>
-      </div> */}
-      {/* <Controlls meetingManager={meetingManager} /> */}
-      <MeetingView meetingManager={meetingManager}>
-        <Controlls meetingManager={meetingManager} />
-        <Canvas meetingManager={meetingManager} />
+
+      <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard}>
+        <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} />
       </MeetingView>
-      {/* <Canvas /> */}
     </>
   );
 }

@@ -14,7 +14,7 @@ import {
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
 
-export const Controlls = ({ meetingManager }) => {
+export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard }) => {
     //Different states to handle the behaviour
     const [muted, setMuted] = useState(false);
     const [screenShared, setScreenShared] = useState(false);
@@ -104,10 +104,11 @@ export const Controlls = ({ meetingManager }) => {
     };
 
     const whiteBoardProps = {
-        icon: screenShared ? <Clear /> : <ScreenShare />,
+        icon: showWhiteBoard ? <Clear /> : <ScreenShare />,
         onClick: () => {
-            //setting up the realTimeMessage
-            // meetingManager.audioVideo.realtimeSendDataMessage('Drawing', ["Hi", "Bye"])
+            console.log("Inside Controller", showWhiteBoard)
+            meetingManager.audioVideo.realtimeSendDataMessage('showWhiteboard', !showWhiteBoard)
+            setShowWhiteBoard(_ => !showWhiteBoard)
         },
         label: 'White Board'
     }

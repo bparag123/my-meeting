@@ -5,9 +5,13 @@
 }
 
 .custom-grid {
-  height: 50vh;
-  width: 50vw;
+  height: auto;
+  width: 100vw;
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+}
+
+.contentShare video {
+  position: relative !important;
+  width: 100vw !important;
+  height: 70vh !important;
 }
