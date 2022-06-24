@@ -5,13 +5,33 @@
 }
 
 .custom-grid {
-  height: auto;
-  width: 100vw;
+  height: 50vh;
+  /* width: 100vw; */
   position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.custom-grid > div {
+  grid-template: repeat(5, 1fr) / repeat(5, 1fr) !important;
 }
 
 .contentShare video {
-  position: relative !important;
+  position: inherit !important;
   width: 100vw !important;
   height: 70vh !important;
+}
+
+.mainLayout {
+  display: flex;
+}
+
+.participants > aside {
+  height: 100vh !important;
+}
+
+@media (max-height: 600px) {
+  .custom-grid > div {
+    grid-auto-flow: row;
+    grid-template: repeat(5, 1fr) / repeat(3, 1fr) !important;
+  }
 }

@@ -14,7 +14,6 @@ root.render(
     <MeetingProvider>
       <App />
     </MeetingProvider>
-    {/* <WhiteBoard /> */}
   </ThemeProvider>
 );
 

@@ -13,6 +13,7 @@ import {
     useLocalVideo
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
+import axios from 'axios';
 
 export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard }) => {
     //Different states to handle the behaviour
@@ -64,9 +65,12 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
     const hangUpButtonProps = {
         icon: <Phone />,
         onClick: async () => {
-            const response = await fetch(`http://localhost:3000/meetings/${meetingManager.meetingId}`, {
-                method: 'DELETE'
-            });
+            const response = await axios.delete(`
+            https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/${meetingManager.meetingId}`)
+            // console.log(`https://avuqgrvsd8.execute-api.us-east-1.amazonaws.com/meetings/${meetingManager.meetingId}`)
+            // const response = await fetch(`https://avuqgrvsd8.execute-api.us-east-1.amazonaws.com/meetings/${meetingManager.meetingId}`, {
+            //     method: 'DELETE'
+            // });
             console.log(response.status)
             if (response.status === 204) {
                 console.log("Ending Meeting")
@@ -85,7 +89,6 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
         },
         label: "Leave"
     }
-
 
     const screenShareButtonProps = {
         icon: screenShared ? <Clear /> : <ScreenShare />,
