@@ -10,7 +10,9 @@ import {
     Clear,
     Pause,
     Play,
-    useLocalVideo
+    useLocalVideo,
+    Record,
+    Laptop
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
 import axios from 'axios';
@@ -19,9 +21,10 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
     //Different states to handle the behaviour
     const [muted, setMuted] = useState(false);
     const [screenShared, setScreenShared] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
     const [pauseContentShare, setPauseContentShare] = useState(false);
     const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
-
+    const [MediaPipelineId, setMediaPipelineId] = useState("")
     const microphoneButtonProps = {
         icon: muted ? <Microphone muted /> : <Microphone />,
         onClick: () => {
@@ -107,7 +110,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
     };
 
     const whiteBoardProps = {
-        icon: showWhiteBoard ? <Clear /> : <ScreenShare />,
+        icon: showWhiteBoard ? <Clear /> : <Laptop />,
         onClick: () => {
             console.log("Inside Controller", showWhiteBoard)
             meetingManager.audioVideo.realtimeSendDataMessage('showWhiteboard', !showWhiteBoard)
@@ -115,6 +118,22 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
         },
         label: 'White Board'
     }
+
+    const startRecordingProps = {
+        icon: isRecording ? <Clear /> : <Record />,
+        onClick: async () => {
+            if (isRecording) {
+                await axios.get(`https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/stopRecording/${MediaPipelineId}`)
+                setIsRecording(_ => false)
+            } else {
+                const data = await axios.get(`https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/startRecording/${meetingManager.meetingId}`)
+                setIsRecording(_ => true)
+                setMediaPipelineId(_ => data.data.MediaPipelineId)
+            }
+        },
+        label: 'Record'
+    }
+
     return (
         <ControlBar showLabels layout="bottom">
             <ControlBarButton {...microphoneButtonProps} />
@@ -123,6 +142,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
             <ControlBarButton {...screenShareButtonProps} />
             <ControlBarButton {...hangUpButtonProps} />
             <ControlBarButton {...leaveMeetingButtonProps} />
+            <ControlBarButton {...startRecordingProps} />
             {screenShared && <ControlBarButton {...pauseButtonProps} />}
         </ControlBar>
     );

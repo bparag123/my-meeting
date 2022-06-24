@@ -6,7 +6,6 @@ import { Controlls } from './controlls';
 import MeetingView from "./meeting.js";
 import setupMeeting from '../utils/setupMeeting';
 import { ToastContainer, toast } from 'react-toastify'
-import Participants from './roster';
 
 // import WhiteBoard from './components/whiteBoard';
 
@@ -61,7 +60,6 @@ function CreateMeeting() {
       <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard}>
         <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} />
       </MeetingView>
-      {/* <Participants /> */}
       <ToastContainer />
     </>
   );

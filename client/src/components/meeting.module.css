@@ -27,6 +27,7 @@
 
 .participants > aside {
   height: 100vh !important;
+  box-shadow: none !important;
 }
 
 @media (max-height: 600px) {

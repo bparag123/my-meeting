@@ -16,12 +16,12 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
     const audioInputDevices = await meetingManager.audioVideo.listAudioInputDevices();
     const audioOutputDevices = await meetingManager.audioVideo.listAudioOutputDevices();
     const videoInputDevices = await meetingManager.audioVideo.listVideoInputDevices();
+    console.log("My Video", videoInputDevices)
 
-    await meetingManager.audioVideo.startAudioInput(audioInputDevices[2]);
-    await meetingManager.audioVideo.chooseAudioOutput(audioOutputDevices[2]);
+    await meetingManager.audioVideo.startAudioInput(audioInputDevices[0]);
+    await meetingManager.audioVideo.chooseAudioOutput(audioOutputDevices[0]);
     await meetingManager.audioVideo.startVideoInput(videoInputDevices[0]);
     await meetingManager.audioVideo.bindAudioElement(audioDev)
-
 
     const observer = {
         audioVideoDidStart: () => {
