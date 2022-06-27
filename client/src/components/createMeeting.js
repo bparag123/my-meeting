@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import {
   useMeetingManager
 } from 'amazon-chime-sdk-component-library-react';
@@ -51,9 +52,8 @@ function CreateMeeting() {
       <input id="meeting" type="text" ref={meetingRef}></input>
       <button onClick={joinMeeting}>Create</button>
       <audio style={{ display: "none" }} ref={audioEle}></audio>
-      {/* <a href={`http://localhost:3000/${invitationLink}`}>Invitation Link</a> */}
       {invitationLink !== "" && <button onClick={() => {
-        navigator.clipboard.writeText(`http://localhost:3000/${invitationLink}`);
+        navigator.clipboard.writeText(`${location.href}`);
       }}>Copy Invitation Link</button>}
 
 

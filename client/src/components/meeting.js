@@ -51,7 +51,6 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard }) => {
             canvasRef.current.clearCanvas();
         })
     }
-
     //Creating remote video elements for all the remote attendees
     const videos = tiles.map(tileId => {
         const attendeeId = tileIdToAttendeeId[tileId]
@@ -59,7 +58,12 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard }) => {
         const attendee = meetingManager.audioVideo.getRemoteVideoSources().find((ele) => {
             return ele.attendee.attendeeId === attendeeId
         })
-        return <RemoteVideo name={attendee.attendee.externalUserId} tileId={tileId} key={tileId} />
+
+        if (attendee) {
+            return <RemoteVideo name={attendee.attendee.externalUserId} tileId={tileId} key={tileId} />
+        } else {
+            return ""
+        }
     });
 
     return (
