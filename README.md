@@ -12,7 +12,9 @@ Basic Features :
   <li>Create Meeting</li>
   <li>Join Meeting</li>
   <li>Screen Sharing</li>
-   <li>Different Meeting Controlls</li>
+  <li>Different Meeting Controlls</li>
+  <li>Video Recording </li>
+  <li>Collaborative Whiteboard</li>
 </ul>
 
 <h3>
