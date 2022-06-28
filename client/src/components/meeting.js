@@ -1,14 +1,15 @@
-import { ContentShare, LocalVideo, RemoteVideo, useRemoteVideoTileState, VideoGrid, useRosterState } from 'amazon-chime-sdk-component-library-react';
+import { ContentShare, LocalVideo, RemoteVideo, useRemoteVideoTileState, VideoGrid } from 'amazon-chime-sdk-component-library-react';
 import { useRef, useState } from 'react';
 import classes from './meeting.module.css'
 import Participants from './roster';
-import Canvas from './whiteBoard';
 
-const MeetingView = ({ children, meetingManager, showWhiteBoard }) => {
+const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipants, setParticipants }) => {
+    console.log(showParticipants)
     //Getting all the remote attende tile state
     const { tiles, tileIdToAttendeeId } = useRemoteVideoTileState();
     // const roster = useRosterState();
-    const [showControlls, setShowControlls] = useState(false);
+    const [showControlls, setShowControlls] = useState(false)
+
     const canvasRef = useRef(null);
     meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
         switch (name) {
@@ -20,37 +21,10 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard }) => {
         }
         console.log(name, attribiutes)
     })
-
     if (meetingManager.audioVideo) {
         console.log(meetingManager.audioVideo.getAllVideoTiles())
     }
 
-    // useEffect(() => {
-    //     console.log(meetingManager.meetingStatus)
-    // })
-
-    //realTime Data Listener
-    if (meetingManager.audioVideo) {
-        meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('Drawing', (data) => {
-            canvasRef.current.loadPaths(data.json())
-        })
-
-        meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('undoDrawing', (data) => {
-            canvasRef.current.undo()
-        })
-
-        meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('redoDrawing', (data) => {
-            canvasRef.current.redo();
-        })
-
-        meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('resetDrawing', (data) => {
-            canvasRef.current.resetCanvas();
-        })
-
-        meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('clearDrawing', (data) => {
-            canvasRef.current.clearCanvas();
-        })
-    }
     //Creating remote video elements for all the remote attendees
     const videos = tiles.map(tileId => {
         const attendeeId = tileIdToAttendeeId[tileId]
@@ -66,16 +40,21 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard }) => {
         }
     });
 
+    //Modifying Visibility of Whiteboard
+    const x = document.querySelector('#comet-container');
+    if (showWhiteBoard) {
+        x.style["visibility"] = "visible";
+    } else {
+        x.style["visibility"] = "hidden";
+    }
+
     return (
         <>
             <div className={classes['mainLayout']}>
-                <div className={classes['participants']}>
+                <div className={showParticipants ? classes['showparticipants'] : classes['hideparticipants']}>
                     <Participants />
                 </div>
-                <div className={classes['meetingPane']}>
-                    <div className={classes['whiteBoard']}>
-                        {showWhiteBoard ? <Canvas meetingManager={meetingManager} ref={canvasRef} /> : ''}
-                    </div>
+                <div className={showWhiteBoard ? classes['disablemeetingPane'] : classes['meetingPane']}>
                     <div className={classes['contentShare']}>
                         <ContentShare />
                     </div>
@@ -84,7 +63,6 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard }) => {
                             <LocalVideo nameplate='Me' />
                             {/* Rendering the remote videos */}
                             {videos}
-                            {/* This component is for content sharing */}
                         </VideoGrid>
                     </div>
                 </div>

@@ -19,6 +19,7 @@ function JoinMeeting() {
     const [audioDev, setAudioDev] = useState("");
     const [videoDev, setVideoDev] = useState("");
     const [showWhiteBoard, setShowWhiteBoard] = useState(false);
+    const [showParticipants, setParticipants] = useState(true);
 
     useEffect(() => {
         setAudioDev(_ => audioEle.current)
@@ -37,7 +38,8 @@ function JoinMeeting() {
             attendee: data.Attendee,
             meetingManager,
             audioDev,
-            setShowWhiteBoard
+            setShowWhiteBoard,
+            setParticipants
         })
     }
 
@@ -49,8 +51,8 @@ function JoinMeeting() {
             <button onClick={joinMeeting}>Join</button>
             <audio style={{ display: "none" }} ref={audioEle}></audio>
 
-            <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard}>
-                <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} />
+            <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants}>
+                <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants} />
             </MeetingView>
         </>
     );

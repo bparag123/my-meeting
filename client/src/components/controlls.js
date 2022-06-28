@@ -12,12 +12,14 @@ import {
     Play,
     useLocalVideo,
     Record,
-    Laptop
+    Laptop,
+    Attendees
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
 import axios from 'axios';
+import setupWhiteboard from '../utils/setupWhiteboard';
 
-export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard }) => {
+export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, showParticipants, setParticipants }) => {
     //Different states to handle the behaviour
     const [muted, setMuted] = useState(false);
     const [screenShared, setScreenShared] = useState(false);
@@ -25,6 +27,9 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
     const [pauseContentShare, setPauseContentShare] = useState(false);
     const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
     const [MediaPipelineId, setMediaPipelineId] = useState("")
+
+    console.log(meetingManager);
+
     const microphoneButtonProps = {
         icon: muted ? <Microphone muted /> : <Microphone />,
         onClick: () => {
@@ -68,12 +73,9 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
     const hangUpButtonProps = {
         icon: <Phone />,
         onClick: async () => {
+            setShowWhiteBoard(_ => false)
             const response = await axios.delete(`
             https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/${meetingManager.meetingId}`)
-            // console.log(`https://avuqgrvsd8.execute-api.us-east-1.amazonaws.com/meetings/${meetingManager.meetingId}`)
-            // const response = await fetch(`https://avuqgrvsd8.execute-api.us-east-1.amazonaws.com/meetings/${meetingManager.meetingId}`, {
-            //     method: 'DELETE'
-            // });
             console.log(response.status)
             if (response.status === 204) {
                 console.log("Ending Meeting")
@@ -85,6 +87,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
     const leaveMeetingButtonProps = {
         icon: <LeaveMeeting />,
         onClick: async () => {
+            setShowWhiteBoard(_ => false)
             meetingManager.audioVideo.stopLocalVideoTile()
             meetingManager.audioVideo.stop()
             meetingManager.leave()
@@ -96,9 +99,8 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
     const screenShareButtonProps = {
         icon: screenShared ? <Clear /> : <ScreenShare />,
         onClick: () => {
-            console.log('Screen button clicked');
-
             if (!screenShared) {
+                setParticipants(_ => false)
                 setScreenShared(state => true)
                 meetingManager.audioVideo.startContentShareFromScreenCapture();
             } else {
@@ -111,9 +113,21 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
 
     const whiteBoardProps = {
         icon: showWhiteBoard ? <Clear /> : <Laptop />,
-        onClick: () => {
-            console.log("Inside Controller", showWhiteBoard)
-            meetingManager.audioVideo.realtimeSendDataMessage('showWhiteboard', !showWhiteBoard)
+        onClick: async () => {
+            console.log(process.env.A)
+            if (!showWhiteBoard) {
+                setParticipants(_ => false)
+                const headers = {
+                    "Authorization": 'Bearer P6y4WbP76WrN8rB70A2aYH3AI0sYjQBJDUrdpx2i'
+                }
+                const whiteBoardResponse = await axios.post('https://hq.pixelpaper.io/api/board', {}, {
+                    headers
+                })
+                setupWhiteboard(whiteBoardResponse.data.room_id, "Me")
+                meetingManager.audioVideo.realtimeSendDataMessage('showWhiteboard', { display: !showWhiteBoard, roomId: whiteBoardResponse.data.room_id })
+            } else {
+                meetingManager.audioVideo.realtimeSendDataMessage('showWhiteboard', { display: !showWhiteBoard })
+            }
             setShowWhiteBoard(_ => !showWhiteBoard)
         },
         label: 'White Board'
@@ -134,6 +148,14 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
         label: 'Record'
     }
 
+    const showParticipantsProp = {
+        icon: showParticipants ? <Clear /> : <Attendees />,
+        onClick: () => {
+            setParticipants(_ => !showParticipants)
+        },
+        label: 'Participants'
+    }
+
     return (
         <ControlBar showLabels layout="bottom">
             <ControlBarButton {...microphoneButtonProps} />
@@ -143,6 +165,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard })
             <ControlBarButton {...hangUpButtonProps} />
             <ControlBarButton {...leaveMeetingButtonProps} />
             <ControlBarButton {...startRecordingProps} />
+            <ControlBarButton {...showParticipantsProp} />
             {screenShared && <ControlBarButton {...pauseButtonProps} />}
         </ControlBar>
     );

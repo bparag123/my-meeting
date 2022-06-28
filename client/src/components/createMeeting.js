@@ -19,6 +19,7 @@ function CreateMeeting() {
   const [audioDev, setAudioDev] = useState("");
   const [videoDev, setVideoDev] = useState("");
   const [showWhiteBoard, setShowWhiteBoard] = useState(false);
+  const [showParticipants, setParticipants] = useState(false);
   const [invitationLink, setInvitationLink] = useState('')
 
   useEffect(() => {
@@ -30,7 +31,6 @@ function CreateMeeting() {
     const createUrl = `https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings?name=${nameRef.current.value}&meeting=${meetingRef.current.value}`
 
     const response = await fetch(createUrl, { method: 'POST' });
-
     const data = await response.json();
     console.log(data);
     setInvitationLink(_ => data.Meeting.MeetingId)
@@ -39,7 +39,8 @@ function CreateMeeting() {
       attendee: data.Attendee,
       meetingManager,
       audioDev,
-      setShowWhiteBoard
+      setShowWhiteBoard,
+      setParticipants
     })
   }
 
@@ -53,12 +54,12 @@ function CreateMeeting() {
       <button onClick={joinMeeting}>Create</button>
       <audio style={{ display: "none" }} ref={audioEle}></audio>
       {invitationLink !== "" && <button onClick={() => {
-        navigator.clipboard.writeText(`${location.href}`);
+        navigator.clipboard.writeText(`${location.href}${invitationLink}`);
       }}>Copy Invitation Link</button>}
 
 
-      <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard}>
-        <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} />
+      <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants}>
+        <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants}/>
       </MeetingView>
       <ToastContainer />
     </>

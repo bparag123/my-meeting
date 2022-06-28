@@ -25,11 +25,28 @@
   display: flex;
 }
 
-.participants > aside {
+.hideparticipants {
+  visibility: hidden;
+}
+
+.hideparticipants > aside {
+  width: 0 !important;
+}
+
+.showparticipants > aside {
+  z-index: 100 !important;
   height: 100vh !important;
   box-shadow: none !important;
 }
 
+.comet-container {
+  border: 1px solid black !important;
+}
+
+.disablemeetingPane {
+  position: absolute;
+  top: 80vh;
+}
 @media (max-height: 600px) {
   .custom-grid > div {
     grid-auto-flow: row;

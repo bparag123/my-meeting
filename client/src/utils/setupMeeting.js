@@ -1,7 +1,7 @@
 import { MeetingSessionConfiguration } from "amazon-chime-sdk-js";
-import { toast } from "react-toastify";
+import setupWhiteboard from "./setupWhiteboard";
 
-const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setShowWhiteBoard }) => {
+const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setShowWhiteBoard, setParticipants }) => {
 
     const meetingSessionConfiguration = new MeetingSessionConfiguration(meeting, attendee);
     // Use the join API to create a meeting session using the MeetingSessionConfiguration
@@ -9,6 +9,7 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
     await meetingManager.join(
         meetingSessionConfiguration
     );
+
     //Configuration of device for attending Meeting
     meetingManager.audioVideo.setDeviceLabelTrigger(async () =>
         await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
@@ -17,9 +18,11 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
     const audioOutputDevices = await meetingManager.audioVideo.listAudioOutputDevices();
     const videoInputDevices = await meetingManager.audioVideo.listVideoInputDevices();
     console.log("My Video", videoInputDevices)
+    console.log("My Audio Input", audioInputDevices)
+    console.log("My Audio Output", audioOutputDevices)
 
     await meetingManager.audioVideo.startAudioInput(audioInputDevices[0]);
-    await meetingManager.audioVideo.chooseAudioOutput(audioOutputDevices[0]);
+    await meetingManager.audioVideo.chooseAudioOutput(audioOutputDevices[0].deviceId);
     await meetingManager.audioVideo.startVideoInput(videoInputDevices[0]);
     await meetingManager.audioVideo.bindAudioElement(audioDev)
 
@@ -39,7 +42,12 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
     }
 
     meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage("showWhiteboard", (data) => {
-        setShowWhiteBoard(_ => data.json())
+        const incomingData = data.json()
+        if (incomingData.roomId) {
+            setParticipants(_ => false)
+            setupWhiteboard(incomingData.roomId, attendee.ExternalUserId)
+        }
+        setShowWhiteBoard(_ => incomingData.display)
     })
     //Binding the Observer
     meetingManager.audioVideo.addObserver(observer)
