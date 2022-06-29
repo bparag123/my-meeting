@@ -28,7 +28,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
     const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
     const [MediaPipelineId, setMediaPipelineId] = useState("")
 
-    console.log(meetingManager);
+    const localUserName = meetingManager.audioVideo.realtimeController.state.localExternalUserId
 
     const microphoneButtonProps = {
         icon: muted ? <Microphone muted /> : <Microphone />,
@@ -125,7 +125,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
                 const whiteBoardResponse = await axios.post('https://hq.pixelpaper.io/api/board', {}, {
                     headers
                 })
-                setupWhiteboard(whiteBoardResponse.data.room_id, "Me")
+                setupWhiteboard(whiteBoardResponse.data.room_id, localUserName)
                 meetingManager.audioVideo.realtimeSendDataMessage('showWhiteboard', { display: !showWhiteBoard, roomId: whiteBoardResponse.data.room_id })
             } else {
                 meetingManager.audioVideo.realtimeSendDataMessage('showWhiteboard', { display: !showWhiteBoard })
