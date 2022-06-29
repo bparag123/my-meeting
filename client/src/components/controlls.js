@@ -47,9 +47,11 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
         icon: isVideoEnabled ? <Camera /> : <Camera disabled />,
         onClick: async () => {
             if (isVideoEnabled) {
+                meetingManager.audioVideo.stopLocalVideoTile()
                 setIsVideoEnabled(false)
             } else {
                 setIsVideoEnabled(true)
+                meetingManager.audioVideo.startLocalVideoTile()
             }
         },
         label: 'Camera'
