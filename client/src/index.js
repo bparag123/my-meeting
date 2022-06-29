@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from 'styled-components'
-import { lightTheme, MeetingProvider, } from 'amazon-chime-sdk-component-library-react'
+import { lightTheme, MeetingProvider, } from 'amazon-chime-sdk-component-library-react';
 // import WhiteBoard from './components/whiteBoard';
 // import MeetingView from './components/meeting';
 

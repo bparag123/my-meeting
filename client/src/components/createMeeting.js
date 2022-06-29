@@ -54,7 +54,7 @@ function CreateMeeting() {
       <button onClick={joinMeeting}>Create</button>
       <audio style={{ display: "none" }} ref={audioEle}></audio>
       {invitationLink !== "" && <button onClick={() => {
-        navigator.clipboard.writeText(`${location.href}${invitationLink}`);
+        navigator.clipboard.writeText(`${location.href}#/${invitationLink}`);
       }}>Copy Invitation Link</button>}
 
 

@@ -1,5 +1,5 @@
 import { ContentShare, LocalVideo, RemoteVideo, useRemoteVideoTileState, VideoGrid } from 'amazon-chime-sdk-component-library-react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import classes from './meeting.module.css'
 import Participants from './roster';
 
@@ -10,7 +10,6 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
     // const roster = useRosterState();
     const [showControlls, setShowControlls] = useState(false)
 
-    const canvasRef = useRef(null);
     meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
         switch (name) {
             case "meetingStartSucceeded":
