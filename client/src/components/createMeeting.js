@@ -6,25 +6,36 @@ import { useRef, useEffect, useState } from 'react';
 import { Controlls } from './controlls';
 import MeetingView from "./meeting.js";
 import setupMeeting from '../utils/setupMeeting';
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 
 // import WhiteBoard from './components/whiteBoard';
 
 function CreateMeeting() {
   const meetingManager = useMeetingManager();
   const audioEle = useRef(null);
-  const videoEle = useRef(null);
   const nameRef = useRef(null);
   const meetingRef = useRef(null);
   const [audioDev, setAudioDev] = useState("");
-  const [videoDev, setVideoDev] = useState("");
   const [showWhiteBoard, setShowWhiteBoard] = useState(false);
   const [showParticipants, setParticipants] = useState(false);
-  const [invitationLink, setInvitationLink] = useState('')
+  const [invitationLink, setInvitationLink] = useState('');
+
+  meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
+    switch (name) {
+      case "meetingStartSucceeded":
+        setInvitationLink(_ => meetingManager.meetingId)
+        break;
+      case "meetingEnded":
+        setInvitationLink(_ => '')
+        break
+      default:
+        console.log("Default")
+    }
+    console.log(name, attribiutes)
+  })
 
   useEffect(() => {
     setAudioDev(_ => audioEle.current)
-    setVideoDev(_ => videoEle.current)
   }, [audioEle, meetingManager])
   const joinMeeting = async () => {
 
@@ -32,7 +43,6 @@ function CreateMeeting() {
 
     const response = await fetch(createUrl, { method: 'POST' });
     const data = await response.json();
-    console.log(data);
     setInvitationLink(_ => data.Meeting.MeetingId)
     setupMeeting({
       meeting: data.Meeting,
@@ -46,12 +56,14 @@ function CreateMeeting() {
 
   return (
     <>
-      <div>Create a New Meeting</div>
-      <label htmlFor="name">Your Name</label>
-      <input id="name" type="text" ref={nameRef}></input>
-      <label htmlFor="meeting">Meeting Name</label>
-      <input id="meeting" type="text" ref={meetingRef}></input>
-      <button onClick={joinMeeting}>Create</button>
+      {invitationLink === "" ? <>
+        <div>Create a New Meeting</div>
+        <label htmlFor="name">Your Name</label>
+        <input id="name" type="text" ref={nameRef}></input>
+        <label htmlFor="meeting">Meeting Name</label>
+        <input id="meeting" type="text" ref={meetingRef}></input>
+        <button onClick={joinMeeting}>Create</button>
+      </> : ""}
       <audio style={{ display: "none" }} ref={audioEle}></audio>
       {invitationLink !== "" && <button onClick={() => {
         navigator.clipboard.writeText(`${location.href}#/${invitationLink}`);
@@ -59,7 +71,7 @@ function CreateMeeting() {
 
 
       <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants}>
-        <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants}/>
+        <Controlls meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants} />
       </MeetingView>
       <ToastContainer />
     </>

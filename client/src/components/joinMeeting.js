@@ -6,7 +6,6 @@ import { Controlls } from './controlls';
 import MeetingView from "./meeting.js";
 import setupMeeting from '../utils/setupMeeting';
 import { useParams } from 'react-router-dom';
-import Participants from './roster';
 
 // import WhiteBoard from './components/whiteBoard';
 
@@ -14,16 +13,28 @@ function JoinMeeting() {
     const { meetingId } = useParams()
     const meetingManager = useMeetingManager();
     const audioEle = useRef(null);
-    const videoEle = useRef(null);
     const nameRef = useRef(null);
     const [audioDev, setAudioDev] = useState("");
-    const [videoDev, setVideoDev] = useState("");
     const [showWhiteBoard, setShowWhiteBoard] = useState(false);
     const [showParticipants, setParticipants] = useState(true);
+    const [joined, setIsJoined] = useState(false);
+
+    meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
+        switch (name) {
+            case "meetingStartSucceeded":
+                setIsJoined(_ => true)
+                break;
+            case "meetingEnded":
+                setIsJoined(_ => false)
+                break
+            default:
+                console.log("Default")
+        }
+        console.log(name, attribiutes)
+    })
 
     useEffect(() => {
         setAudioDev(_ => audioEle.current)
-        setVideoDev(_ => videoEle.current)
     }, [audioEle, meetingManager])
     const joinMeeting = async () => {
 
@@ -32,7 +43,6 @@ function JoinMeeting() {
         const response = await fetch(joinUrl);
 
         const data = await response.json();
-        console.log(data);
         setupMeeting({
             meeting: data.Meeting,
             attendee: data.Attendee,
@@ -41,14 +51,17 @@ function JoinMeeting() {
             setShowWhiteBoard,
             setParticipants
         })
+        setIsJoined(_ => true)
     }
 
     return (
         <>
-            <div>Join Meeting</div>
-            <label htmlFor="name">Your Name</label>
-            <input id="name" type="text" ref={nameRef}></input>
-            <button onClick={joinMeeting}>Join</button>
+            {joined ? '' : <>
+                <div>Join Meeting</div>
+                <label htmlFor="name">Your Name</label>
+                <input id="name" type="text" ref={nameRef}></input>
+                <button onClick={joinMeeting}>Join</button>
+            </>}
             <audio style={{ display: "none" }} ref={audioEle}></audio>
 
             <MeetingView meetingManager={meetingManager} showWhiteBoard={showWhiteBoard} setShowWhiteBoard={setShowWhiteBoard} showParticipants={showParticipants} setParticipants={setParticipants}>
