@@ -21,13 +21,14 @@
     "react-scripts": "^5.0.1",
     "react-sketch-canvas": "^6.2.0",
     "react-toastify": "^9.0.5",
+    "sass": "^1.53.0",
     "styled-components": "^5.3.5",
     "styled-system": "^5.1.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "aws s3 sync build/ s3://datadesignchime"
