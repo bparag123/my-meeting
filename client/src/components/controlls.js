@@ -14,7 +14,8 @@ import {
     Record,
     Laptop,
     Attendees,
-    useAudioInputs, useVideoInputs, useAudioOutputs
+    useAudioInputs, useVideoInputs, useAudioOutputs,
+    useSelectVideoQuality
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
 import axios from 'axios';
@@ -28,11 +29,6 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
     const [pauseContentShare, setPauseContentShare] = useState(false);
     const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
     const [MediaPipelineId, setMediaPipelineId] = useState("")
-
-    //Getting Input Devices list
-    const audioInput = useAudioInputs();
-    const audioOutput = useAudioOutputs();
-    const videoInput = useVideoInputs();
 
     let localUserName = ""
     //Getting Local Username
@@ -86,7 +82,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
         icon: <Phone />,
         onClick: async () => {
             setShowWhiteBoard(_ => false)
-            
+
             const response = await axios.delete(`
             https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/${meetingManager.meetingId}`)
             console.log(response.status)
