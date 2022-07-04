@@ -1,6 +1,7 @@
 import { HashRouter, Outlet, Route, Routes } from 'react-router-dom';
 import JoinMeeting from './components/joinMeeting';
 import CreateMeeting from './components/createMeeting';
+import "./layout/App.scss"
 
 function App() {
 
