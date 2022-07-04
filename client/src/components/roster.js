@@ -4,7 +4,8 @@ import {
     useRosterState,
     Roster,
     RosterGroup,
-    RosterAttendee
+    RosterAttendee,
+    RosterHeader
 } from 'amazon-chime-sdk-component-library-react';
 
 const Participants = () => {
@@ -20,6 +21,13 @@ const Participants = () => {
     return (
         <>
             {attendeeItems.length > 0 && <Roster>
+                <RosterHeader
+                    title="Present"
+                    // badge={2}
+                    // onClose={() => { }}
+                    // searchValue="Michael"
+                    // onSearch={() => { }}
+                />
                 <RosterGroup>{attendeeItems}</RosterGroup>
             </Roster>}
         </>

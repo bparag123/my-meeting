@@ -7,8 +7,6 @@ import setupMeeting from "../utils/setupMeeting";
 import { ToastContainer } from "react-toastify";
 import './../layout/createMeeting.scss'
 
-// import WhiteBoard from './components/whiteBoard';
-
 function CreateMeeting() {
   const meetingManager = useMeetingManager();
   const audioEle = useRef(null);
@@ -38,7 +36,6 @@ function CreateMeeting() {
   }, [audioEle, meetingManager]);
   const joinMeeting = async () => {
     const createUrl = `https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings?name=${nameRef.current.value}&meeting=${meetingRef.current.value}`;
-
     const response = await fetch(createUrl, { method: "POST" });
     const data = await response.json();
     setInvitationLink((_) => data.Meeting.MeetingId);
@@ -97,6 +94,7 @@ function CreateMeeting() {
           showParticipants={showParticipants}
           setParticipants={setParticipants}
         />
+
       </MeetingView>
       <ToastContainer />
     </div>

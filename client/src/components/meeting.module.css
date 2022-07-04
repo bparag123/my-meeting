@@ -47,6 +47,16 @@
   position: absolute;
   top: 80vh;
 }
+
+.options {
+  display: flex;
+}
+
+.options > button {
+  height: 25%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
 @media (max-height: 600px) {
   .custom-grid > div {
     grid-auto-flow: row;
