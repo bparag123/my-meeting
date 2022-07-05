@@ -5,7 +5,8 @@ import { Controlls } from "./controlls";
 import MeetingView from "./meeting.js";
 import setupMeeting from "../utils/setupMeeting";
 import { ToastContainer } from "react-toastify";
-import './../layout/createMeeting.scss'
+import './../layout/createMeeting.scss';
+import {ReactComponent as CopyIcon} from './../images/copy.svg';
 
 function CreateMeeting() {
   const meetingManager = useMeetingManager();
@@ -62,7 +63,7 @@ function CreateMeeting() {
               <label htmlFor="meeting">Meeting Name</label>
               <input id="meeting" type="text" className="h-40" placeholder="Enter Meeting Name" ref={meetingRef}></input>
             </div>
-              <button onClick={joinMeeting} className="btn-primary h-40 w-100" disabled="disabled">Create</button>
+              <button onClick={joinMeeting} className="btn-primary h-40 w-100">Create</button>
         </div>
       ) : (
         ""
@@ -70,13 +71,15 @@ function CreateMeeting() {
       <audio style={{ display: "none" }} ref={audioEle}></audio>
       {invitationLink !== "" && (
         <button
+        className="copyLinkbtn"
+        title=" Copy Invitation Link"
           onClick={() => {
             navigator.clipboard.writeText(
               `${location.href}#/${invitationLink}`
             );
           }}
         >
-          Copy Invitation Link
+         <CopyIcon/>
         </button>
       )}
 

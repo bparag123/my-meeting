@@ -64,7 +64,7 @@ function JoinMeeting() {
               <label htmlFor="name">Meeting ID or Personal Link Name</label>
               <input id="name" type="text" className="h-40" ref={nameRef} placeholder="Enter Meeting ID or Personal Link Name"></input>
             </div>
-            <button onClick={joinMeeting} className="btn-primary h-40 w-100" disabled="disabled">
+            <button onClick={joinMeeting} className="btn-primary h-40 w-100">
               Join
             </button>
           </div>
