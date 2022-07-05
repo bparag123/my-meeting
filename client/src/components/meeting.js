@@ -11,7 +11,7 @@ import Participants from './roster';
 import { isVideoTransformDevice } from 'amazon-chime-sdk-js';
 import Chat from './chat';
 
-const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipants, setParticipants }) => {
+const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipants, showChat, setChat }) => {
     const status = useMeetingStatus()
     const { selectedDevice } = useVideoInputs();
     const { isBackgroundBlurSupported, createBackgroundBlurDevice } =
@@ -106,8 +106,8 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
                 <SpeakerSelection />
             </div> : ''}
 
-            {status && <div className={classes['mainLayout']}>
-                <Chat />
+            {status ? <div className={classes['mainLayout']}>
+
                 <div className={showParticipants ? classes['showparticipants'] : classes['hideparticipants']}>
                     <Participants />
                 </div>
@@ -123,7 +123,10 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
                         </VideoGrid>
                     </div>
                 </div>
-            </div>}
+                <div className={showChat ? classes['showchat'] : classes['hidechat']}>
+                    <Chat />
+                </div>
+            </div> : ''}
             {showControlls && children}
         </>
     );

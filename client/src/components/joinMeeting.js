@@ -16,6 +16,7 @@ function JoinMeeting() {
   const [audioDev, setAudioDev] = useState("");
   const [showWhiteBoard, setShowWhiteBoard] = useState(false);
   const [showParticipants, setParticipants] = useState(true);
+  const [showChat, setChat] = useState(false);
   const [joined, setIsJoined] = useState(false);
 
   meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
@@ -78,6 +79,8 @@ function JoinMeeting() {
         setShowWhiteBoard={setShowWhiteBoard}
         showParticipants={showParticipants}
         setParticipants={setParticipants}
+        setChat={setChat}
+        showChat={showChat}
       >
         <Controlls
           meetingManager={meetingManager}
@@ -85,7 +88,10 @@ function JoinMeeting() {
           setShowWhiteBoard={setShowWhiteBoard}
           showParticipants={showParticipants}
           setParticipants={setParticipants}
+          setChat={setChat}
+          showChat={showChat}
         />
+
       </MeetingView>
     </div>
   );

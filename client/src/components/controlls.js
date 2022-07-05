@@ -14,14 +14,13 @@ import {
     Record,
     Laptop,
     Attendees,
-    useAudioInputs, useVideoInputs, useAudioOutputs,
-    useSelectVideoQuality
+    Chat
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
 import axios from 'axios';
 import setupWhiteboard from '../utils/setupWhiteboard';
 
-export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, showParticipants, setParticipants }) => {
+export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, showParticipants, setParticipants, showChat, setChat }) => {
     //Different states to handle the behaviour
     const [muted, setMuted] = useState(false);
     const [screenShared, setScreenShared] = useState(false);
@@ -157,12 +156,20 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
         label: 'Record'
     }
 
-    const showParticipantsProp = {
+    const showParticipantsProps = {
         icon: showParticipants ? <Clear /> : <Attendees />,
         onClick: () => {
             setParticipants(_ => !showParticipants)
         },
         label: 'Participants'
+    }
+
+    const showChatProps = {
+        icon: showChat ? <Clear /> : <Chat />,
+        onClick: () => {
+            setChat(_ => !showChat)
+        },
+        label: 'Chat'
     }
 
     return (
@@ -174,7 +181,8 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
             <ControlBarButton {...hangUpButtonProps} />
             <ControlBarButton {...leaveMeetingButtonProps} />
             <ControlBarButton {...startRecordingProps} />
-            <ControlBarButton {...showParticipantsProp} />
+            <ControlBarButton {...showParticipantsProps} />
+            <ControlBarButton {...showChatProps} />
             {screenShared && <ControlBarButton {...pauseButtonProps} />}
         </ControlBar>
     );

@@ -6,7 +6,7 @@ import MeetingView from "./meeting.js";
 import setupMeeting from "../utils/setupMeeting";
 import { ToastContainer } from "react-toastify";
 import './../layout/createMeeting.scss';
-import {ReactComponent as CopyIcon} from './../images/copy.svg';
+import { ReactComponent as CopyIcon } from './../images/copy.svg';
 
 function CreateMeeting() {
   const meetingManager = useMeetingManager();
@@ -16,6 +16,7 @@ function CreateMeeting() {
   const [audioDev, setAudioDev] = useState("");
   const [showWhiteBoard, setShowWhiteBoard] = useState(false);
   const [showParticipants, setParticipants] = useState(false);
+  const [showChat, setChat] = useState(false);
   const [invitationLink, setInvitationLink] = useState("");
 
   meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
@@ -46,7 +47,7 @@ function CreateMeeting() {
       meetingManager,
       audioDev,
       setShowWhiteBoard,
-      setParticipants,
+      setParticipants
     });
   };
 
@@ -54,16 +55,16 @@ function CreateMeeting() {
     <div className="main-wrapper">
       {invitationLink === "" ? (
         <div className="create-wrapper">
-            <h2>Create a New Meeting</h2>
-            <div className="form-grp">
-              <label htmlFor="name">Your Name</label>
-              <input id="name" type="text" className="h-40" placeholder="Enter Meeting ID or Personal Link Name" ref={nameRef}></input>
-            </div>
-            <div className="form-grp">
-              <label htmlFor="meeting">Meeting Name</label>
-              <input id="meeting" type="text" className="h-40" placeholder="Enter Meeting Name" ref={meetingRef}></input>
-            </div>
-              <button onClick={joinMeeting} className="btn-primary h-40 w-100">Create</button>
+          <h2>Create a New Meeting</h2>
+          <div className="form-grp">
+            <label htmlFor="name">Your Name</label>
+            <input id="name" type="text" className="h-40" placeholder="Enter Meeting ID or Personal Link Name" ref={nameRef}></input>
+          </div>
+          <div className="form-grp">
+            <label htmlFor="meeting">Meeting Name</label>
+            <input id="meeting" type="text" className="h-40" placeholder="Enter Meeting Name" ref={meetingRef}></input>
+          </div>
+          <button onClick={joinMeeting} className="btn-primary h-40 w-100">Create</button>
         </div>
       ) : (
         ""
@@ -71,15 +72,15 @@ function CreateMeeting() {
       <audio style={{ display: "none" }} ref={audioEle}></audio>
       {invitationLink !== "" && (
         <button
-        className="copyLinkbtn"
-        title=" Copy Invitation Link"
+          className="copyLinkbtn"
+          title=" Copy Invitation Link"
           onClick={() => {
             navigator.clipboard.writeText(
               `${location.href}#/${invitationLink}`
             );
           }}
         >
-         <CopyIcon/>
+          <CopyIcon />
         </button>
       )}
 
@@ -89,6 +90,8 @@ function CreateMeeting() {
         setShowWhiteBoard={setShowWhiteBoard}
         showParticipants={showParticipants}
         setParticipants={setParticipants}
+        setChat={setChat}
+        showChat={showChat}
       >
         <Controlls
           meetingManager={meetingManager}
@@ -96,6 +99,8 @@ function CreateMeeting() {
           setShowWhiteBoard={setShowWhiteBoard}
           showParticipants={showParticipants}
           setParticipants={setParticipants}
+          setChat={setChat}
+          showChat={showChat}
         />
 
       </MeetingView>
