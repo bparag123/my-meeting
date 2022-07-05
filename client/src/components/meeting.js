@@ -3,15 +3,16 @@ import {
     ContentShare, LocalVideo, MicSelection, QualitySelection, RemoteVideo, SpeakerSelection
     , useBackgroundBlur, useRemoteVideoTileState
     , useVideoInputs
-    , VideoGrid
+    , VideoGrid, useMeetingStatus
 } from 'amazon-chime-sdk-component-library-react';
 import { useEffect, useState } from 'react';
 import classes from './meeting.module.css'
 import Participants from './roster';
 import { isVideoTransformDevice } from 'amazon-chime-sdk-js';
+import Chat from './chat';
 
 const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipants, setParticipants }) => {
-
+    const status = useMeetingStatus()
     const { selectedDevice } = useVideoInputs();
     const { isBackgroundBlurSupported, createBackgroundBlurDevice } =
         useBackgroundBlur();
@@ -87,7 +88,7 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
         }
 
         toggleBackgroundBlur();
-    }, [isVideoTransformCheckBoxOn, meetingManager]);
+    }, [isVideoTransformCheckBoxOn]);
 
     return (
         <>
@@ -105,7 +106,8 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
                 <SpeakerSelection />
             </div> : ''}
 
-            <div className={classes['mainLayout']}>
+            {status && <div className={classes['mainLayout']}>
+                <Chat />
                 <div className={showParticipants ? classes['showparticipants'] : classes['hideparticipants']}>
                     <Participants />
                 </div>
@@ -121,7 +123,7 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
                         </VideoGrid>
                     </div>
                 </div>
-            </div>
+            </div>}
             {showControlls && children}
         </>
     );
