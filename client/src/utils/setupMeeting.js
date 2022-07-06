@@ -1,14 +1,18 @@
 import { MeetingSessionConfiguration } from "amazon-chime-sdk-js";
 import setupWhiteboard from "./setupWhiteboard";
+// import configureMessagingSession from '../utils/MessagingSession'
 
-const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setShowWhiteBoard, setParticipants }) => {
+const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setShowWhiteBoard, setParticipants, MemberArn, ChannelArn }) => {
 
-    const meetingSessionConfiguration = new MeetingSessionConfiguration(meeting, attendee);
     // Use the join API to create a meeting session using the MeetingSessionConfiguration
+    const meetingSessionConfiguration = new MeetingSessionConfiguration(meeting, attendee);
 
+    // const messagingSession = await configureMessagingSession(MemberArn)
+    // await messagingSession.start()
     await meetingManager.join(
         meetingSessionConfiguration
     );
+
 
     //Configuration of device for attending Meeting
     meetingManager.audioVideo.setDeviceLabelTrigger(async () =>
@@ -51,11 +55,6 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
     })
     //Binding the Observer
     meetingManager.audioVideo.addObserver(observer)
-
-    // meetingManager.audioVideo.realtimeSubscribeToReceiveDataMessage('newAttendee', (data) => {
-    //     // toast()
-    //     console.log(data.json())
-    // })
 
     //starting transcription
     const transcriptEventHandler = (transcriptEvent) => {

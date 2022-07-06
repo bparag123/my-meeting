@@ -1,46 +1,89 @@
-import React from 'react';
-import { ChatBubble, ChatBubbleContainer, Flex, useAudioVideo, useMeetingManager } from 'amazon-chime-sdk-component-library-react'
+import React, { useLayoutEffect } from 'react';
+import { ChatBubble, ChatBubbleContainer, Flex, useMeetingManager, InfiniteList } from 'amazon-chime-sdk-component-library-react'
 import { useRef } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux'
 import moment from 'moment'
+import getChimeClient from '../utils/ChimeClient'
+import configureMessagingSession from '../utils/MessagingSession';
 
 const Chat = () => {
     const msgRef = useRef(null);
-    const audioVideo = useAudioVideo();
+    const chatConfig = useSelector(state => state.chatConfig)
+    const chimeClient = getChimeClient()
     const [chatData, setChatData] = useState([]);
     const meetingManager = useMeetingManager();
     const localUserName = meetingManager.meetingSessionConfiguration.credentials.externalUserId;
     const localUserId = meetingManager.meetingSessionConfiguration.credentials.attendeeId;
 
-    useEffect(() => {
-        audioVideo.realtimeSubscribeToReceiveDataMessage('chat', (data) => {
-            const msg = data.json()
-            const msgData = {
-                ...msg, senderId: data.senderAttendeeId
-                , senderName: data.senderExternalUserId
-                , timestamp: data.timestampMs
-            }
-            setChatData(prevState => [...prevState, msgData])
-        })
-    }, [audioVideo])
 
-    const sendMessage = () => {
+    //This is for Getting All the Messaging When the User Join the Meeting
+    useLayoutEffect(() => {
+
+        const getMessages = async () => {
+            const msgData = await chimeClient.listChannelMessages({
+                ChannelArn: chatConfig.channelArn,
+                ChimeBearer: chatConfig.memberArn,
+                SortOrder: "ASCENDING"
+            })
+            setChatData(_ => msgData.ChannelMessages)
+        }
+        getMessages()
+    }, [chatConfig, chimeClient])
+
+
+    //This is for initializing the Session For the Messaging (Runs Only Once)
+    useLayoutEffect(() => {
+
+        const configSession = async () => {
+            const messagingSession = await configureMessagingSession(chatConfig.memberArn)
+
+            const messageObserver = {
+                messagingSessionDidStart: () => {
+                    console.log('Messaging Connection started!');
+                },
+                messagingSessionDidStartConnecting: reconnecting => {
+                    console.log('Messaging Connection connecting');
+                },
+                messagingSessionDidStop: event => {
+                    console.log('Messaging Connection received DidStop event');
+                },
+                messagingSessionDidReceiveMessage: message => {
+                    if (message.type === "CREATE_CHANNEL_MESSAGE") {
+                        setChatData(prev => [...prev, JSON.parse(message.payload)])
+                        console.log(JSON.parse(message.payload))
+                    }
+                }
+            };
+            messagingSession.addObserver(messageObserver)
+            await messagingSession.start()
+        }
+        configSession()
+
+    }, [])
+    const sendMessage = async () => {
         if (msgRef.current.value === "") return
-        const dataToSend = {
-            body: msgRef.current.value,
-            type: 'text',
-            time: new Date().getTime()
-        }
-        audioVideo.realtimeSendDataMessage('chat', dataToSend, 300000)
+
+        const msg = await chimeClient.sendChannelMessage({
+            ChannelArn: chatConfig.channelArn,
+            ChimeBearer: chatConfig.memberArn,
+            Persistence: 'PERSISTENT',
+            Type: 'STANDARD',
+            Content: msgRef.current.value
+        })
         msgRef.current.value = ""
-        const msgData = {
-            ...dataToSend,
-            senderId: localUserId,
-            senderName: localUserName,
-        }
-        setChatData(prevState => [...prevState, msgData])
     }
+
+    const messageItems = chatData.map((ele, id) => {
+        return <ChatBubbleContainer timestamp={moment(ele.CreatedTimestamp).format("h:mm a")} key={id}>
+            <ChatBubble variant={ele.Sender.Name === localUserName ? "outgoing" : "incoming"}
+                showTail={true}
+                senderName={ele.Sender.Name}>
+                {ele.Content}
+            </ChatBubble>
+        </ChatBubbleContainer>
+    })
 
     const containerStyles = `
     display: flex; 
@@ -51,17 +94,7 @@ const Chat = () => {
     return (
         <div>
             <Flex layout="stack" css={containerStyles}>
-                {chatData.map((ele) => {
-                    return <ChatBubbleContainer
-                        timestamp={moment(ele.time).format("h:mm a")}
-                    >
-                        <ChatBubble variant={ele.senderId === localUserId ? "outgoing" : "incoming"}
-                            showTail={true}
-                            senderName={ele.senderName}>
-                            {ele.body}
-                        </ChatBubble>
-                    </ChatBubbleContainer>
-                })}
+                <InfiniteList items={messageItems} onLoad={() => { }} isLoading={false} css="height: 50vh" />
                 <input type="text" ref={msgRef} />
                 <button onClick={sendMessage}>Send</button>
             </Flex>
