@@ -5,8 +5,10 @@ import { Controlls } from "./controlls";
 import MeetingView from "./meeting.js";
 import setupMeeting from "../utils/setupMeeting";
 import { ToastContainer } from "react-toastify";
-import "./../layout/createMeeting.scss";
-import { ReactComponent as CopyIcon } from "./../images/copy.svg";
+import './../layout/createMeeting.scss';
+import { ReactComponent as CopyIcon } from './../images/copy.svg';
+import { useDispatch, useSelector } from 'react-redux'
+import chatConfigSlice from "../store/slices/chatConfig";
 
 function CreateMeeting() {
   const meetingManager = useMeetingManager();
@@ -16,7 +18,11 @@ function CreateMeeting() {
   const [audioDev, setAudioDev] = useState("");
   const [showWhiteBoard, setShowWhiteBoard] = useState(false);
   const [showParticipants, setParticipants] = useState(false);
+  const [showChat, setChat] = useState(false);
   const [invitationLink, setInvitationLink] = useState("");
+
+  const chatConfig = useSelector((state) => state.chatConfig)
+  const dispatch = useDispatch()
 
   meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
     switch (name) {
@@ -39,6 +45,10 @@ function CreateMeeting() {
     const createUrl = `https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings?name=${nameRef.current.value}&meeting=${meetingRef.current.value}`;
     const response = await fetch(createUrl, { method: "POST" });
     const data = await response.json();
+    console.log(data)
+
+    dispatch(chatConfigSlice.actions.setUpChat({ channelArn: data.Channel.ChannelArn, memberArn: data.MemberARN }))
+
     setInvitationLink((_) => data.Meeting.MeetingId);
     setupMeeting({
       meeting: data.Meeting,
@@ -47,6 +57,8 @@ function CreateMeeting() {
       audioDev,
       setShowWhiteBoard,
       setParticipants,
+      MemberArn: data.MemberARN,
+      ChannelArn: data.Channel.ChannelArn
     });
   };
 
@@ -88,8 +100,9 @@ function CreateMeeting() {
           className="copyLinkbtn"
           title=" Copy Invitation Link"
           onClick={() => {
+            // const joiningLink = "https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/joinMeeting?meetingId=76da9bfb-44e1-45e1-b0cb-fb46311e2713&chennalARN=arn:aws:chime:us-east-1:514342474989:app-instance/adfbab3a-4e8d-4b43-ad19-77c5fdaec567/channel/ff866143a0d596f9f17c7295f5566d47a693b356064f3c3a74587f6c7d4a7792&adminARN=arn:aws:chime:us-east-1:514342474989:app-instance/adfbab3a-4e8d-4b43-ad19-77c5fdaec567/user/safdsdfsd"
             navigator.clipboard.writeText(
-              `${location.href}#/${invitationLink}`
+              `${location.href}#/${invitationLink}?channelArn=${chatConfig.channelArn}&adminArn=${chatConfig.memberArn}`
             );
           }}
         >
@@ -97,23 +110,29 @@ function CreateMeeting() {
         </button>
       )}
       <div className="mainMeeting">
-        <MeetingView
+
+      <MeetingView
+        meetingManager={meetingManager}
+        showWhiteBoard={showWhiteBoard}
+        setShowWhiteBoard={setShowWhiteBoard}
+        showParticipants={showParticipants}
+        setParticipants={setParticipants}
+        setChat={setChat}
+        showChat={showChat}
+      >
+        <Controlls
           meetingManager={meetingManager}
           showWhiteBoard={showWhiteBoard}
           setShowWhiteBoard={setShowWhiteBoard}
           showParticipants={showParticipants}
           setParticipants={setParticipants}
-        >
-          <Controlls
-            meetingManager={meetingManager}
-            showWhiteBoard={showWhiteBoard}
-            setShowWhiteBoard={setShowWhiteBoard}
-            showParticipants={showParticipants}
-            setParticipants={setParticipants}
-          />
-        </MeetingView>
-      </div>
+          setChat={setChat}
+          showChat={showChat}
+        />
+
+      </MeetingView>
       <ToastContainer />
+    </div>
     </div>
   );
 }

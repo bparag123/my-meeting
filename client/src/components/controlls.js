@@ -1,41 +1,32 @@
 import {
-  Camera,
-  ControlBar,
-  ControlBarButton,
-  LeaveMeeting,
-  Microphone,
-  Phone,
-  ScreenShare,
-  Clear,
-  Pause,
-  Play,
-  useLocalVideo,
-  Record,
-  Laptop,
-  Attendees,
-  useAudioInputs,
-  useVideoInputs,
-  useAudioOutputs,
-  useSelectVideoQuality,
-} from "amazon-chime-sdk-component-library-react";
-import { useState } from "react";
-import axios from "axios";
-import setupWhiteboard from "../utils/setupWhiteboard";
+    Camera,
+    ControlBar,
+    ControlBarButton,
+    LeaveMeeting,
+    Microphone,
+    Phone,
+    ScreenShare,
+    Clear,
+    Pause,
+    Play,
+    useLocalVideo,
+    Record,
+    Laptop,
+    Attendees,
+    Chat
+} from 'amazon-chime-sdk-component-library-react';
+import { useState } from 'react';
+import axios from 'axios';
+import setupWhiteboard from '../utils/setupWhiteboard';
 
-export const Controlls = ({
-  meetingManager,
-  showWhiteBoard,
-  setShowWhiteBoard,
-  showParticipants,
-  setParticipants,
-}) => {
-  //Different states to handle the behaviour
-  const [muted, setMuted] = useState(false);
-  const [screenShared, setScreenShared] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [pauseContentShare, setPauseContentShare] = useState(false);
-  const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo();
-  const [MediaPipelineId, setMediaPipelineId] = useState("");
+export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, showParticipants, setParticipants, showChat, setChat }) => {
+    //Different states to handle the behaviour
+    const [muted, setMuted] = useState(false);
+    const [screenShared, setScreenShared] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+    const [pauseContentShare, setPauseContentShare] = useState(false);
+    const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
+    const [MediaPipelineId, setMediaPipelineId] = useState("")
 
   let localUserName = "";
   //Getting Local Username
@@ -265,6 +256,15 @@ export const Controlls = ({
     label: "Participants",
   };
 
+  const showChatProps = {
+    icon: showChat ?  <span className="actionIcon"> <Clear height={30} width={30} /> </span> : <span className="actionDisable"> <Chat height={30} width={30} /> </span>,
+    onClick: () => {
+        setChat(_ => !showChat)
+    },
+    label: 'Chat'
+}
+
+
   return (
     <div className="actionBtnList">
       <ControlBar className="mainControl"  showLabels layout="bottom">
@@ -285,8 +285,10 @@ export const Controlls = ({
         />
         <ControlBarButton {...startRecordingProps} className="actionButton" />
         <ControlBarButton {...showParticipantsProp} className="actionButton" />
+        <ControlBarButton {...showChatProps} className="actionButton"/>
         {screenShared && (
           <ControlBarButton {...pauseButtonProps} className="actionButton" />
+         
         )}
       </ControlBar>
     </div>

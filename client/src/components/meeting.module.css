@@ -80,6 +80,19 @@
  height: 100%;
  width: 100%;
 }
+.showchat{
+  visibility: visible;
+}
+
+.hidechat{
+  visibility: hidden;
+}
+
+.options > label {
+  font-size: 12px;
+      color: #747486;
+      margin-bottom: 12px;
+}
 
 @media (max-height: 600px) {
   .custom-grid > div {

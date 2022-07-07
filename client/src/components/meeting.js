@@ -1,39 +1,24 @@
 import {
-  CameraSelection,
-  ContentShare,
-  LocalVideo,
-  MicSelection,
-  QualitySelection,
-  RemoteVideo,
-  SpeakerSelection,
-  useBackgroundBlur,
-  useRemoteVideoTileState,
-  useVideoInputs,
-  VideoGrid,
-} from "amazon-chime-sdk-component-library-react";
-import { useEffect, useState } from "react";
-import classes from "./meeting.module.css";
-import Participants from "./roster";
-import { isVideoTransformDevice } from "amazon-chime-sdk-js";
+    CameraSelection,
+    ContentShare, LocalVideo, MicSelection, QualitySelection, RemoteVideo, SpeakerSelection
+    , useBackgroundBlur, useRemoteVideoTileState
+    , useVideoInputs
+    , VideoGrid, useMeetingStatus
+} from 'amazon-chime-sdk-component-library-react';
 import "./../layout/createMeeting.scss";
+import { useEffect, useState } from 'react';
+import classes from './meeting.module.css'
+import Participants from './roster';
+import { isVideoTransformDevice } from 'amazon-chime-sdk-js';
+import Chat from './chat';
 
-const MeetingView = ({
-  children,
-  meetingManager,
-  showWhiteBoard,
-  showParticipants,
-  setParticipants,
-}) => {
-  const { selectedDevice } = useVideoInputs();
-  const { isBackgroundBlurSupported, createBackgroundBlurDevice } =
-    useBackgroundBlur();
-  const [isVideoTransformCheckBoxOn, setisVideoTransformCheckBoxOn] =
-    useState(false);
-
-  //Getting all the remote attende tile state
-  const { tiles, tileIdToAttendeeId } = useRemoteVideoTileState();
-  // const roster = useRosterState();
-  const [showControlls, setShowControlls] = useState(false);
+const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipants, showChat, setChat }) => {
+    const status = useMeetingStatus()
+    const { selectedDevice } = useVideoInputs();
+    const { isBackgroundBlurSupported, createBackgroundBlurDevice } =
+        useBackgroundBlur();
+    const [isVideoTransformCheckBoxOn, setisVideoTransformCheckBoxOn] =
+        useState(false);
 
   meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
     switch (name) {
@@ -105,8 +90,8 @@ const MeetingView = ({
       }
     }
 
-    toggleBackgroundBlur();
-  }, [isVideoTransformCheckBoxOn, meetingManager]);
+        toggleBackgroundBlur();
+    }, [isVideoTransformCheckBoxOn]);
 
   return (
     <>
@@ -121,68 +106,34 @@ const MeetingView = ({
           <Participants />
         </div>
 
-        <div
-          className={
-            showWhiteBoard
-              ? classes["disablemeetingPane"]
-              : classes["meetingPane"]
-          }
-        >
-          {showControlls ? (
-            <div className={classes["options"]}>
-              {isBackgroundBlurSupported && (
-                <button onClick={onClick}>
-                  {isVideoTransformDevice(selectedDevice)
-                    ? "Background Normal"
-                    : "Background Blur"}
-                </button>
-              )}
-              <QualitySelection />
-              <MicSelection />
-              <CameraSelection />
-              <SpeakerSelection />
-            </div>
-          ) : (
-            ""
-          )}
-          <div className="usersList">
-            <div className={classes["contentShare"]}>
-              <ContentShare />
-            </div>
-            <div className={classes["custom-grid"]}>
-              <VideoGrid layout="standard">
-                <LocalVideo nameplate="Me" />
-                {/* Rendering the remote videos */}
-                {videos}
-              </VideoGrid>
-            </div>
-            <div className={classes["custom-grid"]}>
-              <VideoGrid layout="standard">
-                <LocalVideo nameplate="custom" />
-                {/* Rendering the remote videos */}
-                {videos}
-              </VideoGrid>
-            </div>
-            <div className={classes["custom-grid"]}>
-              <VideoGrid layout="standard">
-                <LocalVideo nameplate="Me" />
-                {/* Rendering the remote videos */}
-                {videos}
-              </VideoGrid>
-            </div>
-            <div className={classes["custom-grid"]}>
-              <VideoGrid layout="standard">
-                <LocalVideo nameplate="custom" />
-                {/* Rendering the remote videos */}
-                {videos}
-              </VideoGrid>
-            </div>
-          </div>
+            {status ? <div className={classes['mainLayout']}>
+
+                <div className={showParticipants ? classes['showparticipants'] : classes['hideparticipants']}>
+                    <Participants />
+                </div>
+                <div className={showWhiteBoard ? classes['disablemeetingPane'] : classes['meetingPane']}>
+                <div className="usersList">
+                    <div className={classes['contentShare']}>
+                        <ContentShare />
+                    </div>
+                    <div className={classes['custom-grid']}>
+                        <VideoGrid layout="standard">
+                            <LocalVideo nameplate='Me' />
+                            {/* Rendering the remote videos */}
+                            {videos}
+                        </VideoGrid>
+                    </div>
+                </div>
+                </div>
+                <div className={showChat ? classes['showchat'] : classes['hidechat']}>
+                    <Chat />
+                </div>
+                
+            </div> : ''}
+            {showControlls && children}
         </div>
-      </div>
-      {showControlls && children}
-    </>
-  );
+        </>
+    );
 };
 
 export default MeetingView;

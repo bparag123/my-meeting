@@ -3,20 +3,24 @@ import { useRef, useEffect, useState } from "react";
 import { Controlls } from "./controlls";
 import MeetingView from "./meeting.js";
 import setupMeeting from "../utils/setupMeeting";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import "./../layout/createMeeting.scss";
-
+import { useDispatch, useSelector } from "react-redux";
+import chatConfigSlice from '../store/slices/chatConfig'
 // import WhiteBoard from './components/whiteBoard';
 
 function JoinMeeting() {
   const { meetingId } = useParams();
+  const [queryParams] = useSearchParams()
   const meetingManager = useMeetingManager();
   const audioEle = useRef(null);
   const nameRef = useRef(null);
   const [audioDev, setAudioDev] = useState("");
   const [showWhiteBoard, setShowWhiteBoard] = useState(false);
   const [showParticipants, setParticipants] = useState(true);
+  const [showChat, setChat] = useState(false);
   const [joined, setIsJoined] = useState(false);
+  const dispatch = useDispatch()
 
   meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
     switch (name) {
@@ -29,18 +33,19 @@ function JoinMeeting() {
       default:
         console.log("Default");
     }
-    console.log(name, attribiutes);
   });
 
   useEffect(() => {
     setAudioDev((_) => audioEle.current);
   }, [audioEle, meetingManager]);
   const joinMeeting = async () => {
-    const joinUrl = `https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/joinMeeting?meetingId=${meetingId}&externalUserId=${nameRef.current.value}`;
+    const joinUrl = `https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/joinMeeting?meetingId=${meetingId}&channelARN=${queryParams.get('channelArn')}&adminARN=${queryParams.get('adminArn')}&externalUserId=${nameRef.current.value}`;
 
     const response = await fetch(joinUrl);
 
     const data = await response.json();
+    console.log(data)
+    dispatch(chatConfigSlice.actions.setUpChat({ channelArn: data.channel.ChannelArn, memberArn: data.MemberARN }))
     setupMeeting({
       meeting: data.Meeting,
       attendee: data.Attendee,
@@ -48,6 +53,8 @@ function JoinMeeting() {
       audioDev,
       setShowWhiteBoard,
       setParticipants,
+      MemberArn: data.MemberARN,
+      ChannelArn: data.channel.ChannelArn
     });
     setIsJoined((_) => true);
   };
@@ -78,6 +85,8 @@ function JoinMeeting() {
         setShowWhiteBoard={setShowWhiteBoard}
         showParticipants={showParticipants}
         setParticipants={setParticipants}
+        setChat={setChat}
+        showChat={showChat}
       >
         <Controlls
           meetingManager={meetingManager}
@@ -85,7 +94,10 @@ function JoinMeeting() {
           setShowWhiteBoard={setShowWhiteBoard}
           showParticipants={showParticipants}
           setParticipants={setParticipants}
+          setChat={setChat}
+          showChat={showChat}
         />
+
       </MeetingView>
     </div>
   );
