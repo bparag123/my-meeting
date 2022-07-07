@@ -9,12 +9,12 @@ Tools which i have used :
 
 Basic Features :
 <ul>
-  <li>Create Meeting</li>
-  <li>Join Meeting</li>
+  <li>In Meeting Chat</li>
   <li>Screen Sharing</li>
   <li>Different Meeting Controlls</li>
   <li>Video Recording </li>
   <li>Collaborative Whiteboard</li>
+  <li>Sharing Attachments</li>
 </ul>
 
 <h3>
