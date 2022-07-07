@@ -69,13 +69,27 @@ function CreateMeeting() {
           <h2>Create a New Meeting</h2>
           <div className="form-grp">
             <label htmlFor="name">Your Name</label>
-            <input id="name" type="text" className="h-40" placeholder="Enter Meeting ID or Personal Link Name" ref={nameRef}></input>
+            <input
+              id="name"
+              type="text"
+              className="h-40"
+              placeholder="Enter Meeting ID or Personal Link Name"
+              ref={nameRef}
+            ></input>
           </div>
           <div className="form-grp">
             <label htmlFor="meeting">Meeting Name</label>
-            <input id="meeting" type="text" className="h-40" placeholder="Enter Meeting Name" ref={meetingRef}></input>
+            <input
+              id="meeting"
+              type="text"
+              className="h-40"
+              placeholder="Enter Meeting Name"
+              ref={meetingRef}
+            ></input>
           </div>
-          <button onClick={joinMeeting} className="btn-primary h-40 w-100">Create</button>
+          <button onClick={joinMeeting} className="btn-primary h-40 w-100">
+            Create
+          </button>
         </div>
       ) : (
         ""
@@ -95,6 +109,7 @@ function CreateMeeting() {
           <CopyIcon />
         </button>
       )}
+      <div className="mainMeeting">
 
       <MeetingView
         meetingManager={meetingManager}
@@ -117,6 +132,7 @@ function CreateMeeting() {
 
       </MeetingView>
       <ToastContainer />
+    </div>
     </div>
   );
 }

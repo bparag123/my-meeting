@@ -1,17 +1,18 @@
 
 
-.custom-grid video {
+.custom-grid video {  
   position: inherit !important;
   width: 100% !important;
   height: 100% !important;
+  grid-template: repeat(5, 1fr) / repeat(3, 1fr) !important;
 }
 
 .custom-grid {
-  height: 50vh;
-  /* width: 100vw; */
+  height: 100%;
+  width: 50%;
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
 }
 .custom-grid > div {
   grid-template: repeat(5, 1fr) / repeat(5, 1fr) !important;
@@ -20,11 +21,14 @@
 .contentShare video {
   position: inherit !important;
   width: 100vw !important;
-  height: 70vh !important;
 }
 
 .mainLayout {
   display: flex;
+}
+
+.mainLayout > div:nth-child(2){
+  flex: auto;
 }
 
 .hideparticipants {
@@ -37,7 +41,7 @@
 
 .showparticipants > aside {
   z-index: 100 !important;
-  height: 100vh !important;
+  height: 100% !important;
   box-shadow: none !important;
 }
 
@@ -55,10 +59,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  position: fixed;
-  top: 30px;
-  left: 0;
   width: 100%;
+  white-space: nowrap;
 }
 
 .options > button {
@@ -73,6 +75,11 @@
   box-shadow: 6px 5px 25px -2px rgba(0, 0, 0, 0.3);
 }
 
+.custom-grid > div {
+ display: block;
+ height: 100%;
+ width: 100%;
+}
 .showchat{
   visibility: visible;
 }
@@ -86,6 +93,7 @@
       color: #747486;
       margin-bottom: 12px;
 }
+
 @media (max-height: 600px) {
   .custom-grid > div {
     grid-auto-flow: row;
