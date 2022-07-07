@@ -97,48 +97,106 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
   }, [isVideoTransformCheckBoxOn]);
 
   return (
+    // <>
+    //   <div>
+    //     {showControlls ? <div className={classes['options']}>
+    //       {isBackgroundBlurSupported && (
+    //         <button onClick={onClick}>
+    //           {isVideoTransformDevice(selectedDevice)
+    //             ? 'Background Normal'
+    //             : 'Background Blur'}
+    //         </button>
+    //       )}
+    //       <QualitySelection />
+    //       <MicSelection />
+    //       <CameraSelection />
+    //       <SpeakerSelection />
+    //     </div> : ''}
+
+    //     {status ? <div className={classes['mainLayout']}>
+
+    //       <div className={showParticipants ? classes['showparticipants'] : classes['hideparticipants']}>
+    //         <Participants />
+    //       </div>
+    //       <div className={showWhiteBoard ? classes['disablemeetingPane'] : classes['meetingPane']}>
+    //         <div className="usersList">
+    //           <div className={classes['contentShare']}>
+    //             <ContentShare />
+    //           </div>
+    //           <div className={classes['custom-grid']}>
+    //             <VideoGrid layout="standard">
+    //               <LocalVideo nameplate='Me' />
+    //               {/* Rendering the remote videos */}
+    //               {videos}
+    //             </VideoGrid>
+    //           </div>
+    //         </div>
+    //       </div>
+    //       <div className={showChat ? classes['showchat'] : classes['hidechat']}>
+    //         <Chat />
+    //       </div>
+
+    //     </div> : ''}
+    //     {showControlls && children}
+    //   </div>
+    // </>
+
+
     <>
-      <div>
-        {showControlls ? <div className={classes['options']}>
-          {isBackgroundBlurSupported && (
-            <button onClick={onClick}>
-              {isVideoTransformDevice(selectedDevice)
-                ? 'Background Normal'
-                : 'Background Blur'}
-            </button>
+      {status ? <div className={classes["mainLayout"]}>
+        <div
+          className={
+            showParticipants
+              ? classes["showparticipants"]
+              : classes["hideparticipants"]
+          }
+        >
+          <Participants />
+        </div>
+
+        <div
+          className={
+            showWhiteBoard
+              ? classes["disablemeetingPane"]
+              : classes["meetingPane"]
+          }
+        >
+          {showControlls ? (
+            <div className={classes["options"]}>
+              {isBackgroundBlurSupported && (
+                <button onClick={onClick}>
+                  {isVideoTransformDevice(selectedDevice)
+                    ? "Background Normal"
+                    : "Background Blur"}
+                </button>
+              )}
+              <QualitySelection />
+              <MicSelection />
+              <CameraSelection />
+              <SpeakerSelection />
+            </div>
+          ) : (
+            ""
           )}
-          <QualitySelection />
-          <MicSelection />
-          <CameraSelection />
-          <SpeakerSelection />
-        </div> : ''}
-
-        {status ? <div className={classes['mainLayout']}>
-
-          <div className={showParticipants ? classes['showparticipants'] : classes['hideparticipants']}>
-            <Participants />
-          </div>
-          <div className={showWhiteBoard ? classes['disablemeetingPane'] : classes['meetingPane']}>
-            <div className="usersList">
-              <div className={classes['contentShare']}>
-                <ContentShare />
-              </div>
-              <div className={classes['custom-grid']}>
-                <VideoGrid layout="standard">
-                  <LocalVideo nameplate='Me' />
-                  {/* Rendering the remote videos */}
-                  {videos}
-                </VideoGrid>
-              </div>
+          <div className="usersList">
+            <div className={classes["contentShare"]}>
+              <ContentShare />
+            </div>
+            <div className={classes["custom-grid"]}>
+              <VideoGrid layout="standard">
+                <LocalVideo nameplate="Me" />
+                {/* Rendering the remote videos */}
+                {videos}
+              </VideoGrid>
             </div>
           </div>
           <div className={showChat ? classes['showchat'] : classes['hidechat']}>
-            <Chat />
-          </div>
-
-        </div> : ''}
-        {showControlls && children}
+              <Chat />
+            </div>
+        </div>
       </div>
+        : ''}
+      {showControlls && children}
     </>
   );
 };
