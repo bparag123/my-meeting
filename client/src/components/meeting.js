@@ -1,19 +1,33 @@
 import {
   CameraSelection,
-  ContentShare, LocalVideo, MicSelection, QualitySelection, RemoteVideo, SpeakerSelection
-  , useBackgroundBlur, useRemoteVideoTileState
-  , useVideoInputs
-  , VideoGrid, useMeetingStatus
-} from 'amazon-chime-sdk-component-library-react';
+  ContentShare,
+  LocalVideo,
+  MicSelection,
+  QualitySelection,
+  RemoteVideo,
+  SpeakerSelection,
+  useBackgroundBlur,
+  useRemoteVideoTileState,
+  useVideoInputs,
+  VideoGrid,
+  useMeetingStatus,
+} from "amazon-chime-sdk-component-library-react";
 import "./../layout/createMeeting.scss";
-import { useEffect, useState } from 'react';
-import classes from './meeting.module.css'
-import Participants from './roster';
-import { isVideoTransformDevice } from 'amazon-chime-sdk-js';
-import Chat from './chat';
+import { useEffect, useState } from "react";
+import classes from "./meeting.module.css";
+import Participants from "./roster";
+import { isVideoTransformDevice } from "amazon-chime-sdk-js";
+import Chat from "./chat";
 
-const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipants, showChat, setChat }) => {
-  const status = useMeetingStatus()
+const MeetingView = ({
+  children,
+  meetingManager,
+  showWhiteBoard,
+  showParticipants,
+  showChat,
+  setChat,
+}) => {
+  const status = useMeetingStatus();
   const { selectedDevice } = useVideoInputs();
   const { isBackgroundBlurSupported, createBackgroundBlurDevice } =
     useBackgroundBlur();
@@ -141,61 +155,121 @@ const MeetingView = ({ children, meetingManager, showWhiteBoard, showParticipant
     //   </div>
     // </>
 
-
     <>
-      {status ? <div className={classes["mainLayout"]}>
-        <div
-          className={
-            showParticipants
-              ? classes["showparticipants"]
-              : classes["hideparticipants"]
-          }
-        >
-          <Participants />
-        </div>
-
-        <div
-          className={
-            showWhiteBoard
-              ? classes["disablemeetingPane"]
-              : classes["meetingPane"]
-          }
-        >
-          {showControlls ? (
-            <div className={classes["options"]}>
-              {isBackgroundBlurSupported && (
-                <button onClick={onClick}>
-                  {isVideoTransformDevice(selectedDevice)
-                    ? "Background Normal"
-                    : "Background Blur"}
-                </button>
-              )}
-              <QualitySelection />
-              <MicSelection />
-              <CameraSelection />
-              <SpeakerSelection />
-            </div>
-          ) : (
-            ""
-          )}
-          <div className="usersList">
-            <div className={classes["contentShare"]}>
-              <ContentShare />
-            </div>
-            <div className={classes["custom-grid"]}>
-              <VideoGrid layout="standard">
-                <LocalVideo nameplate="Me" />
-                {/* Rendering the remote videos */}
-                {videos}
-              </VideoGrid>
-            </div>
+      {status ? (
+        <div className={classes["mainLayout"]}>
+          <div
+            className={
+              showParticipants
+                ? classes["showparticipants"]
+                : classes["hideparticipants"]
+            }
+          >
+            <Participants />
           </div>
-          <div className={showChat ? classes['showchat'] : classes['hidechat']}>
+
+          <div
+            className={
+              showWhiteBoard
+                ? classes["disablemeetingPane"]
+                : classes["meetingPane"]
+            }
+          >
+            {showControlls ? (
+              <div className={classes["options"]}>
+                {isBackgroundBlurSupported && (
+                  <button onClick={onClick}>
+                    {isVideoTransformDevice(selectedDevice)
+                      ? "Background Normal"
+                      : "Background Blur"}
+                  </button>
+                )}
+                <QualitySelection />
+                <MicSelection />
+                <CameraSelection />
+                <SpeakerSelection />
+              </div>
+            ) : (
+              ""
+            )}
+            <div className="usersList">
+              <div className={classes["contentShare"]}>
+                <ContentShare />
+              </div>
+              <div className={classes["custom-grid"]}>
+                <VideoGrid layout="standard">
+                  <LocalVideo nameplate="Me" />
+                  {/* Rendering the remote videos */}
+                  {videos}
+                </VideoGrid>
+              </div>
+            </div>
+            <div class="userWrapper">
+              <div class="userList" data-users="4">
+                <div class="userItem">
+                  <video width="400" controls>
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.mp4"
+                      type="video/mp4"
+                    />
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.ogg"
+                      type="video/ogg"
+                    />
+                    Your browser does not support HTML video.
+                  </video>
+                </div>
+                <div class="userItem">
+                  <video width="400" controls>
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.mp4"
+                      type="video/mp4"
+                    />
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.ogg"
+                      type="video/ogg"
+                    />
+                    Your browser does not support HTML video.
+                  </video>
+                </div>
+                <div class="userItem">
+                  <video width="400" controls>
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.mp4"
+                      type="video/mp4"
+                    />
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.ogg"
+                      type="video/ogg"
+                    />
+                    Your browser does not support HTML video.
+                  </video>
+                </div>
+                <div class="userItem">
+                  <video width="400" controls>
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.mp4"
+                      type="video/mp4"
+                    />
+                    <source
+                      src="https://www.w3schools.com/html/mov_bbb.ogg"
+                      type="video/ogg"
+                    />
+                    Your browser does not support HTML video.
+                  </video>
+                </div>
+              </div>
+            </div>
+            <div
+              className={showChat ? classes["showchat"] : classes["hidechat"]}
+            >
               <Chat />
             </div>
+          </div>
         </div>
-      </div>
-        : ''}
+      ) : (
+        ""
+      )}
       {showControlls && children}
     </>
   );
