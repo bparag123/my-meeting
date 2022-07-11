@@ -6,15 +6,8 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import getChimeClient from '../utils/ChimeClient'
 import configureMessagingSession from '../utils/MessagingSession';
-// import upload from '../utils/UploadAttachment';
-
-const fileObjDefaults = {
-    name: '',
-    file: '',
-    type: '',
-    response: null,
-    key: '',
-};
+import { getPresignedUrl, uploadFileToBucket, getFileDownloadableUrl } from '../utils/UploadAttachment';
+import formatBytes from '../utils/formatBytes';
 
 const Chat = () => {
     const msgRef = useRef(null);
@@ -23,7 +16,6 @@ const Chat = () => {
     const chimeClient = getChimeClient()
     const [chatData, setChatData] = useState([]);
     const meetingManager = useMeetingManager();
-    const [fileObj, setFileObj] = useState(fileObjDefaults)
     const localUserName = meetingManager.meetingSessionConfiguration.credentials.externalUserId;
     const localUserId = meetingManager.meetingSessionConfiguration.credentials.attendeeId;
 
@@ -76,37 +68,32 @@ const Chat = () => {
 
     const sendMessage = async () => {
         if (fileRef.current.value !== '') {
-            console.log("Sending File")
+            const file = fileRef.current.files[0]
             try {
-
                 //UploadFile API
-                //After receiving response from api i need to setup the file config url
+                const presignedUrl = await getPresignedUrl(file.name, file.type)
+
+                await uploadFileToBucket(presignedUrl, file)
+
+                const downloadableUrl = await getFileDownloadableUrl(file.name)
 
                 const msg = await chimeClient.sendChannelMessage({
                     ChannelArn: chatConfig.channelArn,
                     ChimeBearer: chatConfig.memberArn,
                     Persistence: 'PERSISTENT',
                     Type: 'STANDARD',
-                    Content: ' ',
-                    Metadata: JSON.stringify({
-                        attachments: [
-                            {
-                                fileKey: 'response.key',
-                                name: 'uploadObj.name',
-                                size: 'uploadObj.file.size',
-                                type: 'uploadObj.file.type',
-                            },
-                        ],
-                    })
+                    Content: downloadableUrl,
+                    Metadata:
+                        JSON.stringify({
+                            name: file.name,
+                            size: formatBytes(file.size),
+                        }),
                 })
-                console.log(msg)
+
                 fileRef.current.value = ""
-                // setFileObj(_ => fileObjDefaults)
             } catch (error) {
                 console.log(error.message)
             }
-
-            // upload(fileObj)
         }
         else if (msgRef.current.value !== "") {
             await chimeClient.sendChannelMessage({
@@ -121,16 +108,23 @@ const Chat = () => {
 
     }
 
+    const Attachment = (msg, url) => {
+        const data = JSON.parse(msg)
+        return <MessageAttachment
+            onClick={(e) => {
+            }}
+            name={data.name}
+            size={data.size}
+            downloadUrl={url} />
+    }
+
     const messageItems = chatData.map((ele, id) => {
         return <ChatBubbleContainer timestamp={moment(ele.CreatedTimestamp).format("h:mm a")} key={id}>
             <ChatBubble variant={ele.Sender.Name === localUserName ? "outgoing" : "incoming"}
                 showTail={true}
                 senderName={ele.Sender.Name}>
                 {ele.Metadata ?
-                    <MessageAttachment
-                        name="Monthly_report.txt"
-                        size="30.3KB"
-                        downloadUrl="https://www.w3.org/TR/PNG/iso_8859-1.txt" />
+                    Attachment(ele.Metadata, ele.Content)
                     :
                     ele.Content
                 }
@@ -154,19 +148,7 @@ const Chat = () => {
                 <input
                     type="file"
                     accept="file_extension|audio/*|video/*|image/*|media_type"
-
                     ref={fileRef}
-                    onChange={(event) => {
-                        const file = event.currentTarget.files[0];
-                        if (!file) return;
-
-                        if (file.size / 1024 / 1024 < 5) {
-                            setFileObj({
-                                file: file,
-                                name: file.name,
-                            });
-                        }
-                    }}
                 />
                 <button onClick={sendMessage}>Send</button>
             </Flex>

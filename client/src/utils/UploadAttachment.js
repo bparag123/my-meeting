@@ -1,43 +1,37 @@
-// import { Storage } from "@aws-amplify/storage"
+import axios from 'axios'
 
-// const upload = async (fileObj) => {
-//     const response = await Storage.put('uploadfiles/', fileObj, {
-//         contentType: fileObj.type,
-//     })
-//     console.log(response)
-// }
+const getPresignedUrl = async (key, type) => {
+    const response = await axios.post('https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/storeMedia', {
+        Key: key,
+        ContentType: type
+    })
+    return response.data.url.uploadURL
+}
 
-// export default upload
+const uploadFileToBucket = async (presignedUrl, file) => {
+    try {
+        const options = {
+            headers: { "Content-Type": file.type }
+        }
+        const result = await axios.put(presignedUrl, file, {
+            ...options,
+            onUploadProgress: (e) => {
+                console.log("Uploading ", e)
+            },
 
-// import config from "../config"
-// import AWS from 'aws-sdk'
+        })
+        return result
+    } catch (error) {
+        return error.message
+    }
 
-// AWS.config.credentials = new AWS.Credentials(config.ACCESS_KEY_ID, config.SECRET_ACCESS_KEY, null)
+}
 
-// const uploadFile = async (fileObj) => {
-//     console.log(fileObj)
-//     const myBucket = 'datadesignattachments'
-//     const s3 = new AWS.S3({
-//         region: 'us-east-1',
-//         params: {
-//             Bucket: myBucket
-//         }
-//     })
+const getFileDownloadableUrl = async (name) => {
 
-//     const params = {
-//         ACL: 'public-read',
-//         Body: fileObj.file,
-//         Bucket: myBucket,
-//         Key: fileObj.name
-//     };
-
-//     s3.putObject(params)
-//         .on('httpUploadProgress', (evt) => {
-//             console.log(evt)
-//         })
-//         .send((err) => {
-//             if (err) console.log(err)
-//         })
-// }
-
-// export default uploadFile
+    const result = await axios.post('https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/getMedia', {
+        Key: name
+    })
+    return result.data.url.getURL
+}
+export { getPresignedUrl, uploadFileToBucket, getFileDownloadableUrl }
