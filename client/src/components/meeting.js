@@ -204,62 +204,7 @@ const MeetingView = ({
                 </VideoGrid>
               </div>
             </div>
-            <div class="userWrapper">
-              <div class="userList" data-users="4">
-                <div class="userItem">
-                  <video width="400" controls>
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.mp4"
-                      type="video/mp4"
-                    />
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.ogg"
-                      type="video/ogg"
-                    />
-                    Your browser does not support HTML video.
-                  </video>
-                </div>
-                <div class="userItem">
-                  <video width="400" controls>
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.mp4"
-                      type="video/mp4"
-                    />
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.ogg"
-                      type="video/ogg"
-                    />
-                    Your browser does not support HTML video.
-                  </video>
-                </div>
-                <div class="userItem">
-                  <video width="400" controls>
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.mp4"
-                      type="video/mp4"
-                    />
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.ogg"
-                      type="video/ogg"
-                    />
-                    Your browser does not support HTML video.
-                  </video>
-                </div>
-                <div class="userItem">
-                  <video width="400" controls>
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.mp4"
-                      type="video/mp4"
-                    />
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.ogg"
-                      type="video/ogg"
-                    />
-                    Your browser does not support HTML video.
-                  </video>
-                </div>
-              </div>
-            </div>
+           
             <div
               className={showChat ? classes["showchat"] : classes["hidechat"]}
             >
