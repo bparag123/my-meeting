@@ -169,11 +169,11 @@ const MeetingView = ({
           </div>
 
           <div
-            className={
+            className={`${
               showWhiteBoard
                 ? classes["disablemeetingPane"]
                 : classes["meetingPane"]
-            }
+            } ${classes.videoGridWrapper}`}
           >
             {showControlls ? (
               <div className={classes["options"]}>
@@ -192,19 +192,20 @@ const MeetingView = ({
             ) : (
               ""
             )}
-            <div className="usersList">
-              <div className={classes["contentShare"]}>
-                <ContentShare />
-              </div>
-              <div className={classes["custom-grid"]}>
-                <VideoGrid layout="standard">
-                  <LocalVideo nameplate="Me" />
-                  {/* Rendering the remote videos */}
-                  {videos}
-                </VideoGrid>
+            <div class="userWrapper">
+              <div className="usersList">
+                <div className={classes["contentShare"]}>
+                  <ContentShare />
+                </div>
+                <div className={classes["custom-grid"]}>
+                  <VideoGrid layout="standard">
+                    <LocalVideo nameplate="Me" />
+                    {/* Rendering the remote videos */}
+                    {videos}
+                  </VideoGrid>
+                </div>
               </div>
             </div>
-           
             <div
               className={showChat ? classes["showchat"] : classes["hidechat"]}
             >

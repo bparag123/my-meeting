@@ -39,8 +39,23 @@
 
 .showparticipants > aside {
   z-index: 100 !important;
-  height: 100vh !important;
+  height: 100% !important;
   box-shadow: none !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.showparticipants + .videoGridWrapper {
+  max-width: calc(100% - 297px);
+  width: 100%;
+  margin-left: auto;
+}
+
+.hideparticipants + .videoGridWrapper {
+  width: 100%;
+  max-width: calc(100% - 0px);
+  margin-left: auto;
+  padding: 20px;
 }
 
 .comet-container {
@@ -59,6 +74,14 @@
   padding: 0 20px;
   width: 100%;
   white-space: nowrap;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  background-color: #fff;
+}
+.showparticipants + .videoGridWrapper .options {
+  max-width: calc(100% - 297px);
+  width: 100%;
 }
 
 .options > button {
