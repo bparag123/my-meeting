@@ -1,34 +1,39 @@
 import {
-    Camera,
-    ControlBar,
-    ControlBarButton,
-    LeaveMeeting,
-    Microphone,
-    Phone,
-    ScreenShare,
-    Clear,
-    Pause,
-    Play,
-    useLocalVideo,
-    Record,
-    Laptop,
-    Attendees,
-    Chat
+  Camera,
+  ControlBar,
+  ControlBarButton,
+  LeaveMeeting,
+  Microphone,
+  Phone,
+  ScreenShare,
+  Clear,
+  Pause,
+  Play,
+  useLocalVideo,
+  Record,
+  Laptop,
+  Attendees,
+  Meeting,
+  Chat,
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
 import axios from 'axios';
 import setupWhiteboard from '../utils/setupWhiteboard';
+import { useSelector, useDispatch } from 'react-redux';
+import transcriptConfig from '../store/slices/transcription'
 
 export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, showParticipants, setParticipants, showChat, setChat }) => {
-    //Different states to handle the behaviour
-    const [muted, setMuted] = useState(false);
-    const [screenShared, setScreenShared] = useState(false);
-    const [isRecording, setIsRecording] = useState(false);
-    const [pauseContentShare, setPauseContentShare] = useState(false);
-    const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
-    const [MediaPipelineId, setMediaPipelineId] = useState("")
 
+  const [muted, setMuted] = useState(false);
+  const [screenShared, setScreenShared] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const isTranscripting = useSelector(state => state.transcriptConfig.active)
+  const [pauseContentShare, setPauseContentShare] = useState(false);
+  const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
+  const [MediaPipelineId, setMediaPipelineId] = useState("")
+  const dispatch = useDispatch()
   let localUserName = "";
+  console.log(meetingManager)
   //Getting Local Username
   if (meetingManager.audioVideo) {
     localUserName =
@@ -257,17 +262,46 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
   };
 
   const showChatProps = {
-    icon: showChat ?  <span className="actionIcon"> <Clear height={30} width={30} /> </span> : <span className="actionDisable"> <Chat height={30} width={30} /> </span>,
+    icon: showChat ? <span className="actionIcon"> <Clear height={30} width={30} /> </span> : <span className="actionDisable"> <Chat height={30} width={30} /> </span>,
     onClick: () => {
-        setChat(_ => !showChat)
+      setChat(_ => !showChat)
     },
     label: 'Chat'
-}
+  }
 
+
+
+  const startTranscriptionProps = {
+    icon: isTranscripting ? (
+      <span className="actionIcon">
+        {" "}
+        <Clear height={30} width={30} />{" "}
+      </span>
+    ) : (
+      <span className="actionDisable">
+        {" "}
+        <Meeting height={30} width={30} />{" "}
+      </span>
+    ),
+    onClick: async () => {
+      if (isTranscripting) {
+        await axios.get(
+          `https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/stopTranscription/${meetingManager.meetingId}`
+        );
+        dispatch(transcriptConfig.actions.transcriptionSwitch({ active: false }))
+      } else {
+        await axios.get(
+          `https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/startTranscription/${meetingManager.meetingId}`
+        );
+        dispatch(transcriptConfig.actions.transcriptionSwitch({ active: true }))
+      }
+    },
+    label: "Transcription",
+  };
 
   return (
     <div className="actionBtnList">
-      <ControlBar className="mainControl"  showLabels layout="bottom">
+      <ControlBar className="mainControl" showLabels layout="bottom">
         <ControlBarButton {...microphoneButtonProps} className="actionButton" />
         <ControlBarButton {...cameraButtonProps} className="actionButton" />
         <ControlBarButton {...whiteBoardProps} className="actionButton" />
@@ -284,11 +318,12 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
           className="actionButton back-red"
         />
         <ControlBarButton {...startRecordingProps} className="actionButton" />
+        <ControlBarButton {...startTranscriptionProps} className="actionButton" />
         <ControlBarButton {...showParticipantsProp} className="actionButton" />
-        <ControlBarButton {...showChatProps} className="actionButton"/>
+        <ControlBarButton {...showChatProps} className="actionButton" />
         {screenShared && (
           <ControlBarButton {...pauseButtonProps} className="actionButton" />
-         
+
         )}
       </ControlBar>
     </div>

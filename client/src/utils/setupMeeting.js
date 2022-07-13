@@ -56,14 +56,6 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
     //Binding the Observer
     meetingManager.audioVideo.addObserver(observer)
 
-    //starting transcription
-    const transcriptEventHandler = (transcriptEvent) => {
-        console.log(transcriptEvent)
-    }
-    meetingManager.audioVideo.transcriptionController.subscribeToTranscriptEvent(transcriptEventHandler)
-
-    // Start the session to join the meeting
-
     await meetingManager.start();
 }
 

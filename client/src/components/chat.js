@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { ChatBubble, ChatBubbleContainer, Flex, useMeetingManager, InfiniteList, MessageAttachment } from 'amazon-chime-sdk-component-library-react'
+import { ChatBubble, ChatBubbleContainer, Flex, EmojiPicker, useMeetingManager, InfiniteList, MessageAttachment } from 'amazon-chime-sdk-component-library-react'
 import { useRef } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux'
@@ -8,6 +8,9 @@ import getChimeClient from '../utils/ChimeClient'
 import configureMessagingSession from '../utils/MessagingSession';
 import { getPresignedUrl, uploadFileToBucket, getFileDownloadableUrl } from '../utils/UploadAttachment';
 import formatBytes from '../utils/formatBytes';
+import Picker from 'emoji-picker-react'
+import emojiParser from '../utils/emojiFormat';
+import classes from './chat.module.css'
 
 const Chat = () => {
     const msgRef = useRef(null);
@@ -15,14 +18,15 @@ const Chat = () => {
     const chatConfig = useSelector(state => state.chatConfig)
     const chimeClient = getChimeClient()
     const [chatData, setChatData] = useState([]);
+    const [text, setText] = useState("");
     const meetingManager = useMeetingManager();
+    const [showEmoji, setShowEmoji] = useState(false)
     const localUserName = meetingManager.meetingSessionConfiguration.credentials.externalUserId;
     const localUserId = meetingManager.meetingSessionConfiguration.credentials.attendeeId;
 
 
     //This is for Getting All the Messaging When the User Join the Meeting
     useLayoutEffect(() => {
-        console.log("Chat Runs")
         const getMessages = async () => {
             const msgData = await chimeClient.listChannelMessages({
                 ChannelArn: chatConfig.channelArn,
@@ -95,15 +99,17 @@ const Chat = () => {
                 console.log(error.message)
             }
         }
-        else if (msgRef.current.value !== "") {
+        else if (text !== "") {
             await chimeClient.sendChannelMessage({
                 ChannelArn: chatConfig.channelArn,
                 ChimeBearer: chatConfig.memberArn,
                 Persistence: 'PERSISTENT',
                 Type: 'STANDARD',
-                Content: msgRef.current.value
+                Content: text
             })
             msgRef.current.value = ""
+            setText(_ => "")
+            setShowEmoji(_ => false)
         }
 
     }
@@ -126,7 +132,7 @@ const Chat = () => {
                 {ele.Metadata ?
                     Attachment(ele.Metadata, ele.Content)
                     :
-                    ele.Content
+                    emojiParser(ele.Content)
                 }
             </ChatBubble>
 
@@ -140,17 +146,50 @@ const Chat = () => {
     width : 30rem;
   `;
 
+    const onEmojiClick = (event, emojiObject) => {
+        console.log(emojiObject.emoji)
+        const codePoint = emojiObject.emoji.codePointAt(0)
+        console.log(codePoint)
+        msgRef.current.value += emojiObject.emoji
+        setText(state => {
+            return state + `<emo>${codePoint}</emo>`
+        })
+        // setChosenEmoji(state => state + `<emo>${codePoint}</emo>`)
+        // repl(chosenEmoji)
+    };
+
+    // const onBackSpace = (e) => {
+    //     if (e.key === 'Backspace') {
+    //         if (text.slice(-6) === "</emo>") {
+    //             console.log("It's emo")
+    //         }
+    //     }
+    // }
+
     return (
         <div>
             <Flex layout="stack" css={containerStyles}>
                 <InfiniteList items={messageItems} onLoad={() => { }} isLoading={false} css="height: 50vh" />
-                <input type="text" ref={msgRef} />
+                <input type="text" ref={msgRef} onChange={(e) => {
+                    console.log("Change", e.target.value)
+                    setText(state => {
+                        console.log(text)
+                        return state + e.target.value.slice(e.target.value.length - 1)
+                    })
+                }} />
                 <input
                     type="file"
                     accept="file_extension|audio/*|video/*|image/*|media_type"
                     ref={fileRef}
                 />
-                <button onClick={sendMessage}>Send</button>
+                <div>
+                    <button onClick={() => {
+                        setShowEmoji(state => !state)
+                    }}><EmojiPicker height={15} width={15} /></button>
+                    <button onClick={sendMessage}>Send</button>
+                </div>
+
+                {showEmoji ? <div className={classes['emojiPicker']}><Picker onEmojiClick={onEmojiClick} /></div> : ''}
             </Flex>
         </div >
     );

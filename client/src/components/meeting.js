@@ -18,6 +18,7 @@ import classes from "./meeting.module.css";
 import Participants from "./roster";
 import { isVideoTransformDevice } from "amazon-chime-sdk-js";
 import Chat from "./chat";
+import Transcription from './transcription'
 
 const MeetingView = ({
   children,
