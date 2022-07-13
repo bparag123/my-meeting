@@ -20,6 +20,7 @@
     "compress-json": "^2.0.1",
     "dotenv": "^16.0.1",
     "emoji-picker-react": "^3.5.1",
+    "emoji-regex": "^10.1.0",
     "moment": "^2.29.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",

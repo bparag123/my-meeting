@@ -11,6 +11,8 @@ import formatBytes from '../utils/formatBytes';
 import Picker from 'emoji-picker-react'
 import emojiParser from '../utils/emojiFormat';
 import classes from './chat.module.css'
+import emojiRegex from 'emoji-regex'
+import { unicodeToCodepoint, surrogatePairToCodePoint, toUTF16 } from '../utils/emojis/emojiConverter'
 
 const Chat = () => {
     const msgRef = useRef(null);
@@ -18,7 +20,6 @@ const Chat = () => {
     const chatConfig = useSelector(state => state.chatConfig)
     const chimeClient = getChimeClient()
     const [chatData, setChatData] = useState([]);
-    const [text, setText] = useState("");
     const meetingManager = useMeetingManager();
     const [showEmoji, setShowEmoji] = useState(false)
     const localUserName = meetingManager.meetingSessionConfiguration.credentials.externalUserId;
@@ -99,7 +100,13 @@ const Chat = () => {
                 console.log(error.message)
             }
         }
-        else if (text !== "") {
+        else if (msgRef.current.value !== "") {
+            const emojiPattern = emojiRegex();
+            const text = msgRef.current.value.replace(emojiPattern, (m, idx) => {
+                return `${toUTF16(m.codePointAt(0))}`;
+            })
+            // const content = unicodeToCodepoint(text)
+            // console.log("Chat", content)
             await chimeClient.sendChannelMessage({
                 ChannelArn: chatConfig.channelArn,
                 ChimeBearer: chatConfig.memberArn,
@@ -108,7 +115,6 @@ const Chat = () => {
                 Content: text
             })
             msgRef.current.value = ""
-            setText(_ => "")
             setShowEmoji(_ => false)
         }
 
@@ -132,7 +138,7 @@ const Chat = () => {
                 {ele.Metadata ?
                     Attachment(ele.Metadata, ele.Content)
                     :
-                    emojiParser(ele.Content)
+                    unicodeToCodepoint(ele.Content)
                 }
             </ChatBubble>
 
@@ -147,36 +153,14 @@ const Chat = () => {
   `;
 
     const onEmojiClick = (event, emojiObject) => {
-        console.log(emojiObject.emoji)
-        const codePoint = emojiObject.emoji.codePointAt(0)
-        console.log(codePoint)
         msgRef.current.value += emojiObject.emoji
-        setText(state => {
-            return state + `<emo>${codePoint}</emo>`
-        })
-        // setChosenEmoji(state => state + `<emo>${codePoint}</emo>`)
-        // repl(chosenEmoji)
     };
-
-    // const onBackSpace = (e) => {
-    //     if (e.key === 'Backspace') {
-    //         if (text.slice(-6) === "</emo>") {
-    //             console.log("It's emo")
-    //         }
-    //     }
-    // }
 
     return (
         <div>
             <Flex layout="stack" css={containerStyles}>
                 <InfiniteList items={messageItems} onLoad={() => { }} isLoading={false} css="height: 50vh" />
-                <input type="text" ref={msgRef} onChange={(e) => {
-                    console.log("Change", e.target.value)
-                    setText(state => {
-                        console.log(text)
-                        return state + e.target.value.slice(e.target.value.length - 1)
-                    })
-                }} />
+                <input type="text" ref={msgRef} />
                 <input
                     type="file"
                     accept="file_extension|audio/*|video/*|image/*|media_type"
