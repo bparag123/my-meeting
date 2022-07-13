@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { ChatBubble, ChatBubbleContainer, Flex, useMeetingManager, InfiniteList, MessageAttachment } from 'amazon-chime-sdk-component-library-react'
+import { ChatBubble, ChatBubbleContainer, Flex, EmojiPicker, useMeetingManager, InfiniteList, MessageAttachment } from 'amazon-chime-sdk-component-library-react'
 import { useRef } from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux'
@@ -10,6 +10,7 @@ import { getPresignedUrl, uploadFileToBucket, getFileDownloadableUrl } from '../
 import formatBytes from '../utils/formatBytes';
 import Picker from 'emoji-picker-react'
 import emojiParser from '../utils/emojiFormat';
+import classes from './chat.module.css'
 
 const Chat = () => {
     const msgRef = useRef(null);
@@ -19,6 +20,7 @@ const Chat = () => {
     const [chatData, setChatData] = useState([]);
     const [text, setText] = useState("");
     const meetingManager = useMeetingManager();
+    const [showEmoji, setShowEmoji] = useState(false)
     const localUserName = meetingManager.meetingSessionConfiguration.credentials.externalUserId;
     const localUserId = meetingManager.meetingSessionConfiguration.credentials.attendeeId;
 
@@ -107,6 +109,7 @@ const Chat = () => {
             })
             msgRef.current.value = ""
             setText(_ => "")
+            setShowEmoji(_ => false)
         }
 
     }
@@ -155,6 +158,14 @@ const Chat = () => {
         // repl(chosenEmoji)
     };
 
+    // const onBackSpace = (e) => {
+    //     if (e.key === 'Backspace') {
+    //         if (text.slice(-6) === "</emo>") {
+    //             console.log("It's emo")
+    //         }
+    //     }
+    // }
+
     return (
         <div>
             <Flex layout="stack" css={containerStyles}>
@@ -163,7 +174,7 @@ const Chat = () => {
                     console.log("Change", e.target.value)
                     setText(state => {
                         console.log(text)
-                        return state + e.target.value.slice(e.target.value.length-1)
+                        return state + e.target.value.slice(e.target.value.length - 1)
                     })
                 }} />
                 <input
@@ -171,8 +182,14 @@ const Chat = () => {
                     accept="file_extension|audio/*|video/*|image/*|media_type"
                     ref={fileRef}
                 />
-                <button onClick={sendMessage}>Send</button>
-                <Picker onEmojiClick={onEmojiClick} />
+                <div>
+                    <button onClick={() => {
+                        setShowEmoji(state => !state)
+                    }}><EmojiPicker height={15} width={15} /></button>
+                    <button onClick={sendMessage}>Send</button>
+                </div>
+
+                {showEmoji ? <div className={classes['emojiPicker']}><Picker onEmojiClick={onEmojiClick} /></div> : ''}
             </Flex>
         </div >
     );
