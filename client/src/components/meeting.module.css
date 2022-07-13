@@ -12,9 +12,9 @@
   /* left: 50%; */
   /* transform: translateX(-50%); */
 }
-.custom-grid > div {
-  grid-template: repeat(5, 1fr) / repeat(5, 1fr) !important;
-}
+/* .custom-grid > div {
+  grid-template: repeat(5, 1fr) / repeat(5, 1fr) !important;  
+} */
 
 .contentShare video {
   position: inherit !important;
@@ -110,11 +110,11 @@
 
 .hidechat {
   visibility: hidden;
-}
+} 
 
-@media (max-height: 600px) {
+/* @media (max-height: 600px) {
   .custom-grid > div {
     grid-auto-flow: row;
     grid-template: repeat(5, 1fr) / repeat(3, 1fr) !important;
   }
-}
+} */
