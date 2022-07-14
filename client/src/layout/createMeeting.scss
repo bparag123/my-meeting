@@ -10,11 +10,17 @@
     color: $color-black;
     text-align: center;
     margin-bottom: 42px;
+    &:focus-visible {
+      outline: none;
+    }
   }
   .form-grp {
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
+    &:focus-visible {
+      outline: none;
+    }
     label {
       display: block !important;
       color: $color-gray;
@@ -25,8 +31,11 @@
       border-radius: 12px;
       border: 2px solid #eee;
       padding: 0 16px;
-      &:focus {
+      &:focus { 
         border: 2px solid $color-primary;
+        outline: none;
+      }
+      &:focus-visible {
         outline: none;
       }
     }

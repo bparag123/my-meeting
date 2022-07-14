@@ -193,15 +193,19 @@ const MeetingView = ({
             ) : (
               ""
             )}
-            <div className={classes["contentShare"]}>
-              <ContentShare />
-            </div>
-            <div className={classes["custom-grid"]}>
-              <VideoGrid layout="standard">
-                <LocalVideo nameplate="Me" />
-                {/* Rendering the remote videos */}
-                {videos}
-              </VideoGrid>
+            <div className="usersList">
+              <div className={classes["contentShare"]}>
+                <ContentShare />
+              </div>
+              <div className={classes["custom-grid"]}>
+                <VideoGrid layout="standard">
+                  <LocalVideo nameplate="Me" />
+                  {/* Rendering the remote videos */}
+                  {videos}
+                </VideoGrid>
+              </div>
+              {/* //setting for Transcription */}
+              <Transcription />
             </div>
             <div
               className={showChat ? classes["showchat"] : classes["hidechat"]}
