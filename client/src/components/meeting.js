@@ -193,11 +193,11 @@ const MeetingView = ({
             ) : (
               ""
             )}
-            <div className="usersList">
+            <div className="userslist">
               <div className={classes["contentShare"]}>
                 <ContentShare />
               </div>
-              <div className={classes["custom-grid"]}>
+              <div className={`${classes["custom-grid"]} ${classes["userWrapper"]}`}>
                 <VideoGrid layout="standard">
                   <LocalVideo nameplate="Me" />
                   {/* Rendering the remote videos */}
