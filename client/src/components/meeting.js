@@ -207,12 +207,13 @@ const MeetingView = ({
               {/* //setting for Transcription */}
               <Transcription />
             </div>
-            <div
+           
+          </div>
+          <div
               className={showChat ? classes["showchat"] : classes["hidechat"]}
             >
               <Chat />
             </div>
-          </div>
         </div>
       ) : (
         ""
