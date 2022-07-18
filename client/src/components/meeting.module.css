@@ -21,36 +21,40 @@
   width: 100vw !important;
 }
 
-.userWrapper{
-	width: 100vw;
-	height: 100vh;
-	margin: 0;
-	display: grid;
-	grid-gap: 1rem;
-  padding-top: 90px;
+.userWrapper {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  display: grid;
+  grid-gap: 1rem;
+  padding: 90px 0 60px;
 }
 
 .userWrapper > div {
   width: 100%;
-	height: 100%;
-	display: grid;
+  height: 100%;
+  /* 	display: grid;
 	grid-template-columns: repeat(36, 1fr) !important;
 	grid-template-rows: repeat(36, 1fr) !important;
-	grid-gap: 1px;
-	overflow: hidden;
+	grid-gap: 1px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-wrap: wrap;
 }
 
 .userWrapper > div > div {
-  grid-column: span 18;
-	grid-row: span 18;
+  /*   grid-column: span 18;
+	grid-row: span 18; */
 }
 
 .userWrapper > div > div > video {
   width: 100%;
-	height: 100%;
-	display: block;
-	object-fit: cover;
-	object-position: center;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
 }
 
 .mainLayout {
@@ -87,7 +91,6 @@
   width: 100%;
   max-width: calc(100% - 0px);
   margin-left: auto;
-  padding: 20px;
 }
 
 .comet-container {
@@ -138,11 +141,12 @@
   position: absolute;
   top: 10vh;
   right: 0;
+  display: block;
 }
 
 .hidechat {
-  visibility: hidden;
-} 
+  display: none;
+}
 
 /* @media (max-height: 600px) {
   .custom-grid > div {

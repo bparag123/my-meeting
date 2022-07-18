@@ -143,18 +143,35 @@ label {
 	object-position: center;
 }
 
-[size="1"] > .userItem { grid-column: span 36; grid-row: span 36; }
-[size="2"] > .userItem { grid-column: span 18; grid-row: span 36; }
-[size="3"] > .userItem { grid-column: span 18; grid-row: span 18; }
-[size="3"] > .userItem:nth-of-type(3) { grid-column: span 36; grid-row: span 18; }
-[size="4"] > .userItem { grid-column: span 18; grid-row: span 18; }
-[size="5"] > .userItem{ grid-column: span 12; grid-row: span 18; }
-[size="5"] > .userItem:nth-of-type(1),
-[size="5"] > .userItem:nth-of-type(2) { grid-column: span 18; grid-row: span 18; }
-[size="6"] > .userItem { grid-column: span 18; grid-row: span 12; }
-[size="7"] > .userItem { grid-column: span 9; grid-row: span 18; }
-[size="7"] > .userItem:nth-of-type(1),
-[size="7"] > .userItem:nth-of-type(2),
-[size="7"] > .userItem:nth-of-type(3) { grid-column: span 12; grid-row: span 18; }
-[size="8"] > .userItem { grid-column: span 9; grid-row: span 18; }
-[size="9"] > .userItem { grid-column: span 12; grid-row: span 12; }
+/* [size="1"] > div { grid-column: span 36; grid-row: span 36; }
+[size="2"] > div { grid-column: span 18; grid-row: span 36; }
+[size="3"] > div { grid-column: span 18; grid-row: span 18; }
+[size="3"] > div:nth-of-type(3) { grid-column: span 36; grid-row: span 18; }
+[size="4"] > div { grid-column: span 18; grid-row: span 18; }
+[size="5"] > div{ grid-column: span 12; grid-row: span 18; }
+[size="5"] > div:nth-of-type(1),
+[size="5"] > div:nth-of-type(2) { grid-column: span 18; grid-row: span 18; }
+[size="6"] > div { grid-column: span 18; grid-row: span 12; }
+[size="7"] > div { grid-column: span 9; grid-row: span 18; }
+[size="7"] > div:nth-of-type(1),
+[size="7"] > div:nth-of-type(2),
+[size="7"] > div:nth-of-type(3) { grid-column: span 12; grid-row: span 18; }
+[size="8"] > div { grid-column: span 9; grid-row: span 18; }
+[size="9"] > div { grid-column: span 12; grid-row: span 12; } */
+
+[size="1"] > div { max-width: calc(100% / 1); height: calc(100% / 1);}
+[size="2"] > div { max-width: calc(100% / 2); height: calc(100% / 1);}
+[size="3"] > div { max-width: calc(100% / 2); height: calc(100% / 2);}
+[size="4"] > div { max-width: calc(100% / 2); height: calc(100% / 2);}
+[size="5"] > div{ max-width: calc(100% / 3); height: calc(100% / 2);}
+[size="6"] > div{ max-width: calc(100% / 3); height: calc(100% / 2);}
+[size="7"] > div{ max-width: calc(100% / 3); height: calc(100% / 3);}
+[size="8"] > div{ max-width: calc(100% / 3); height: calc(100% / 3);}
+[size="9"] > div{ max-width: calc(100% / 3); height: calc(100% / 3);}
+[size="10"] > div{ max-width: calc(100% / 4); height: calc(100% / 3);}
+[size="11"] > div{ max-width: calc(100% / 4); height: calc(100% / 3);}
+[size="12"] > div{ max-width: calc(100% / 4); height: calc(100% / 3);}
+[size="13"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}
+[size="14"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}
+[size="15"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}
+[size="16"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}

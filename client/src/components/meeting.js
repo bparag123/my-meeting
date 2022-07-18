@@ -193,7 +193,7 @@ const MeetingView = ({
             ) : (
               ""
             )}
-            <div className="userslist">
+            <div className={classes["userslist"]}>
               <div className={classes["contentShare"]}>
                 <ContentShare />
               </div>
