@@ -1,5 +1,6 @@
 import { useAudioVideo } from 'amazon-chime-sdk-component-library-react';
 import React, { useEffect, useState } from 'react';
+import classes from './transcription.module.css'
 
 const Transcription = () => {
 
@@ -18,7 +19,7 @@ const Transcription = () => {
         audioVideo.transcriptionController.subscribeToTranscriptEvent(transcriptEventHandler)
     }, [])
     return (
-        <div>
+        <div className={classes['transcription']}>
             {transcriptData}
         </div>
     );

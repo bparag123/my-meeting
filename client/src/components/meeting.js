@@ -11,6 +11,7 @@ import {
   useVideoInputs,
   VideoGrid,
   useMeetingStatus,
+  useLocalVideo,
 } from "amazon-chime-sdk-component-library-react";
 import "./../layout/createMeeting.scss";
 import { useEffect, useState } from "react";
@@ -36,6 +37,7 @@ const MeetingView = ({
     useState(false);
   //Getting all the remote attende tile state
   const { tiles, tileIdToAttendeeId } = useRemoteVideoTileState();
+  const { isVideoEnabled } = useLocalVideo()
   // const roster = useRosterState();
   const [showControlls, setShowControlls] = useState(false);
   meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
@@ -170,11 +172,10 @@ const MeetingView = ({
           </div>
 
           <div
-            className={`${
-              showWhiteBoard
-                ? classes["disablemeetingPane"]
-                : classes["meetingPane"]
-            } ${classes.videoGridWrapper}`}
+            className={`${showWhiteBoard
+              ? classes["disablemeetingPane"]
+              : classes["meetingPane"]
+              } ${classes.videoGridWrapper}`}
           >
             {showControlls ? (
               <div className={classes["options"]}>
@@ -197,9 +198,9 @@ const MeetingView = ({
               <div className={classes["contentShare"]}>
                 <ContentShare />
               </div>
-              <div className={`${classes["custom-grid"]} ${classes["userWrapper"]}`}>
+              <div className={`${classes["userWrapper"]}`}>
                 <VideoGrid layout="standard">
-                  <LocalVideo nameplate="Me" />
+                  {isVideoEnabled ? <LocalVideo nameplate="Me" /> : ''}
                   {/* Rendering the remote videos */}
                   {videos}
                 </VideoGrid>
@@ -207,13 +208,13 @@ const MeetingView = ({
               {/* //setting for Transcription */}
               <Transcription />
             </div>
-           
+
           </div>
           <div
-              className={showChat ? classes["showchat"] : classes["hidechat"]}
-            >
-              <Chat />
-            </div>
+            className={showChat ? classes["showchat"] : classes["hidechat"]}
+          >
+            <Chat />
+          </div>
         </div>
       ) : (
         ""

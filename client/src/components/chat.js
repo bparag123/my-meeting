@@ -22,8 +22,13 @@ const Chat = () => {
     const [chatData, setChatData] = useState([]);
     const meetingManager = useMeetingManager();
     const [showEmoji, setShowEmoji] = useState(false)
-    const localUserName = meetingManager.meetingSessionConfiguration.credentials.externalUserId;
-    const localUserId = meetingManager.meetingSessionConfiguration.credentials.attendeeId;
+    let localUserName = ''
+    let localUserId = ''
+    if (meetingManager.meetingSessionConfiguration) {
+        localUserName = meetingManager.meetingSessionConfiguration.credentials.externalUserId;
+        localUserId = meetingManager.meetingSessionConfiguration.credentials.attendeeId;
+    }
+
 
 
     //This is for Getting All the Messaging When the User Join the Meeting
