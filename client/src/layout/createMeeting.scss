@@ -10,11 +10,17 @@
     color: $color-black;
     text-align: center;
     margin-bottom: 42px;
+    &:focus-visible {
+      outline: none;
+    }
   }
   .form-grp {
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
+    &:focus-visible {
+      outline: none;
+    }
     label {
       display: block !important;
       color: $color-gray;
@@ -25,8 +31,11 @@
       border-radius: 12px;
       border: 2px solid #eee;
       padding: 0 16px;
-      &:focus {
+      &:focus { 
         border: 2px solid $color-primary;
+        outline: none;
+      }
+      &:focus-visible {
         outline: none;
       }
     }
@@ -73,16 +82,10 @@ label {
   justify-content: center;
   align-items: center;
 }
-.ch-video {
-  object-fit: cover;
-}
 .ch-nameplate {
   bottom: 14px !important;
 }
-.usersList {
-  display: flex;
-  flex-wrap: wrap;
-}
+
 .ch-control-bar-item-iconButton {
   width: 35px;
   height: 35px;
@@ -113,20 +116,15 @@ label {
 }
 }
 
-.userWrapper{
-	width: 100vw;
-	height: 100vh;
-	margin: 0;
-	display: grid;
-	grid-gap: 1rem;
-}
+
+
 
 .userList{
 	width: 100%;
 	height: 100%;
 	display: grid;
-	grid-template-columns: repeat(36, 1fr);
-	grid-template-rows: repeat(36, 1fr);
+	grid-template-columns: repeat(36, 1fr) !important;
+	grid-template-rows: repeat(36, 1fr) !important;
 	grid-gap: 1px;
 	overflow: hidden;
 }
@@ -142,18 +140,19 @@ label {
 	object-position: center;
 }
 
-[data-users="1"] > .userItem { grid-column: span 36; grid-row: span 36; }
-[data-users="2"] > .userItem { grid-column: span 18; grid-row: span 36; }
-[data-users="3"] > .userItem { grid-column: span 18; grid-row: span 18; }
-[data-users="3"] > .userItem:nth-of-type(3) { grid-column: span 36; grid-row: span 18; }
-[data-users="4"] > .userItem { grid-column: span 18; grid-row: span 18; }
-[data-users="5"] > .userItem{ grid-column: span 12; grid-row: span 18; }
-[data-users="5"] > .userItem:nth-of-type(1),
-[data-users="5"] > .userItem:nth-of-type(2) { grid-column: span 18; grid-row: span 18; }
-[data-users="6"] > .userItem { grid-column: span 18; grid-row: span 12; }
-[data-users="7"] > .userItem { grid-column: span 9; grid-row: span 18; }
-[data-users="7"] > .userItem:nth-of-type(1),
-[data-users="7"] > .userItem:nth-of-type(2),
-[data-users="7"] > .userItem:nth-of-type(3) { grid-column: span 12; grid-row: span 18; }
-[data-users="8"] > .userItem { grid-column: span 9; grid-row: span 18; }
-[data-users="9"] > .userItem { grid-column: span 12; grid-row: span 12; }
+[size="1"] > div { max-width: calc(100% / 1); height: calc(100% / 1);}
+[size="2"] > div { max-width: calc(100% / 2); height: calc(100% / 1);}
+[size="3"] > div { max-width: calc(100% / 2); height: calc(100% / 2);}
+[size="4"] > div { max-width: calc(100% / 2); height: calc(100% / 2);}
+[size="5"] > div{ max-width: calc(100% / 3); height: calc(100% / 2);}
+[size="6"] > div{ max-width: calc(100% / 3); height: calc(100% / 2);}
+[size="7"] > div{ max-width: calc(100% / 3); height: calc(100% / 3);}
+[size="8"] > div{ max-width: calc(100% / 3); height: calc(100% / 3);}
+[size="9"] > div{ max-width: calc(100% / 3); height: calc(100% / 3);}
+[size="10"] > div{ max-width: calc(100% / 4); height: calc(100% / 3);}
+[size="11"] > div{ max-width: calc(100% / 4); height: calc(100% / 3);}
+[size="12"] > div{ max-width: calc(100% / 4); height: calc(100% / 3);}
+[size="13"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}
+[size="14"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}
+[size="15"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}
+[size="16"] > div{ max-width: calc(100% / 4); height: calc(100% / 4);}
