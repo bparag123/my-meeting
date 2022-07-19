@@ -167,8 +167,8 @@ const Chat = () => {
     // }
 
     return (
-        <div>
-            <Flex layout="stack" css={containerStyles}>
+        <div className='chatWrapper'>
+            <Flex className='ChatFlex' layout="stack" css={containerStyles}>
                 <InfiniteList items={messageItems} onLoad={() => { }} isLoading={false} css="height: 50vh" />
                 <input type="text" ref={msgRef} onChange={(e) => {
                     console.log("Change", e.target.value)
@@ -182,11 +182,11 @@ const Chat = () => {
                     accept="file_extension|audio/*|video/*|image/*|media_type"
                     ref={fileRef}
                 />
-                <div>
-                    <button onClick={() => {
+                <div className='emojiWrapper'>
+                    <button className='emojiBtn' onClick={() => {
                         setShowEmoji(state => !state)
-                    }}><EmojiPicker height={15} width={15} /></button>
-                    <button onClick={sendMessage}>Send</button>
+                    }}><EmojiPicker height={20} width={20} /></button>
+                    <button className='sendBtn' onClick={sendMessage}>Send</button>
                 </div>
 
                 {showEmoji ? <div className={classes['emojiPicker']}><Picker onEmojiClick={onEmojiClick} /></div> : ''}
