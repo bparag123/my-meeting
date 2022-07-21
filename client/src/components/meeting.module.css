@@ -129,16 +129,25 @@
   right: 0;
 }
 .showchat > div > div {
-  height: 100%;
+  height: 70%;
   width: 296px;
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
 }
 
 .showchat > div > div > ul {
   height: 100%;
   margin: 0;
+  background-color: #D6EBFB;
+}
+
+.showchat > div > div > div {
+  position: relative;
+}
+
+.showchat > div > div > div > input:first-child {
+  width: 100%;
 }
 @media (max-height: 600px) {
   .custom-grid > div {

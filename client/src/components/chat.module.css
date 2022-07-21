@@ -1,5 +1,9 @@
 .emojiPicker {
   position: absolute;
-  top: 20;
+  bottom: 80px;
   right: 0;
+}
+
+.chatActionWrapper {
+  width: 100%;
 }
