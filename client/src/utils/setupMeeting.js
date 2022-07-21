@@ -13,7 +13,6 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
         meetingSessionConfiguration
     );
 
-
     //Configuration of device for attending Meeting
     meetingManager.audioVideo.setDeviceLabelTrigger(async () =>
         await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
@@ -25,17 +24,12 @@ const setupMeeting = async ({ meeting, attendee, meetingManager, audioDev, setSh
     console.log("My Audio Input", audioInputDevices)
     console.log("My Audio Output", audioOutputDevices)
 
-    await meetingManager.audioVideo.startAudioInput(audioInputDevices[0]);
     await meetingManager.audioVideo.chooseAudioOutput(audioOutputDevices[0].deviceId);
-    await meetingManager.audioVideo.startVideoInput(videoInputDevices[0]);
     await meetingManager.audioVideo.bindAudioElement(audioDev)
 
     const observer = {
         audioVideoDidStart: () => {
             console.log("didStart")
-            //Start our local user video
-            // meetingManager.audioVideo.startLocalVideoTile();
-            // meetingManager.audioVideo.bindVideoElement(localTileId, videoDev);
         },
 
         videoTileDidUpdate: tile => {
