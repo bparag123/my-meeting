@@ -30,6 +30,7 @@
   height: 40px;
   font-size: 14px;  
   font-weight: 500;
+  border: 1px solid #D6EBFB;
 }
 
 .attach:focus-visible {
@@ -38,6 +39,27 @@
 
 .send:focus-visible {
   outline: none;
+}
+
+.fileSelect 
+{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 11px;
+  right: 63px;
+  cursor: pointer;
+}
+.fileSelect input
+{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 100;
 }
 
 .emojiWrapper {
