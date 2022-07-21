@@ -24,6 +24,7 @@ import setupWhiteboard from '../utils/setupWhiteboard';
 import { useSelector, useDispatch } from 'react-redux';
 import transcriptConfig from '../store/slices/transcription'
 import { useNavigate } from 'react-router-dom';
+import whiteboardConfig from '../store/slices/whiteboard'
 
 export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, showParticipants, setParticipants, showChat, setChat }) => {
 
@@ -32,6 +33,7 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
   const [screenShared, setScreenShared] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const isTranscripting = useSelector(state => state.transcriptConfig.active)
+  const whiteboardId = useSelector(state => state.whiteboardConfig.whiteboardId)
   const [pauseContentShare, setPauseContentShare] = useState(false);
   const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
   const [MediaPipelineId, setMediaPipelineId] = useState("")
@@ -197,23 +199,22 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
       </span>
     ),
     onClick: async () => {
-      console.log(process.env.A);
+
       if (!showWhiteBoard) {
         setParticipants((_) => false);
-        const headers = {
-          Authorization: "Bearer P6y4WbP76WrN8rB70A2aYH3AI0sYjQBJDUrdpx2i",
-        };
-        const whiteBoardResponse = await axios.post(
-          "https://hq.pixelpaper.io/api/board",
-          {},
-          {
-            headers,
-          }
-        );
-        setupWhiteboard(whiteBoardResponse.data.room_id, localUserName);
+
+        //get new whiteboard
+        const whiteboard = await axios.get(`https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/getWhiteboard/${meetingManager.meetingId}`)
+        if (whiteboardId === "") {
+          setupWhiteboard(whiteboard.data.WhiteboardId, localUserName);
+          dispatch(whiteboardConfig.actions.setWhiteboard({
+          whiteboardId: whiteboard.data.WhiteboardId
+        }))
+        }
+        
         meetingManager.audioVideo.realtimeSendDataMessage("showWhiteboard", {
           display: !showWhiteBoard,
-          roomId: whiteBoardResponse.data.room_id,
+          roomId: whiteboard.data.WhiteboardId,
         });
       } else {
         meetingManager.audioVideo.realtimeSendDataMessage("showWhiteboard", {
