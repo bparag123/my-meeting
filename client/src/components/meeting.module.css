@@ -123,6 +123,7 @@
   height: 100%;
   margin: 0;
   background-color: #D6EBFB;
+  overflow: auto;
 }
 
 @media (max-height: 600px) {

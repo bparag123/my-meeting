@@ -177,13 +177,16 @@ const Chat = () => {
 
         <div className={classes["chatActionWrapper"]}>
           <input className={classes["attach"]} type="text" ref={msgRef} />
+          <div className={classes["fileSelect"]}>
+            <AttachFile />
           <input
             className={classes["send"]}
 
             type="file"
             accept="file_extension|audio/*|video/*|image/*|media_type"
             ref={fileRef}
-          />
+            />
+            </div>
           <div className={classes["emojiWrapper"]}>
             <button
               className={classes["emojiBtn"]}
