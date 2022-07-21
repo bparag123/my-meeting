@@ -10,6 +10,8 @@ import { getPresignedUrl, uploadFileToBucket, getFileDownloadableUrl } from '../
 import formatBytes from '../utils/formatBytes';
 import Picker from 'emoji-picker-react'
 import emojiParser from '../utils/emojiFormat';
+
+import { AttachFile, Send, InsertEmoticon } from '@mui/icons-material';
 import classes from './chat.module.css'
 import emojiRegex from 'emoji-regex'
 import { unicodeToCodepoint, surrogatePairToCodePoint, toUTF16 } from '../utils/emojis/emojiConverter'
@@ -166,6 +168,9 @@ const Chat = () => {
             <Flex className='ChatFlex' layout="stack" css={containerStyles}>
                 <InfiniteList items={messageItems} onLoad={() => { }} isLoading={false} css="height: 50vh" />
                 <input type="text" ref={msgRef} />
+
+                {/* Use this Tag as a Icon for Attachment <AttachFile /> */}
+
                 <input
                     type="file"
                     accept="file_extension|audio/*|video/*|image/*|media_type"
@@ -174,8 +179,8 @@ const Chat = () => {
                 <div className='emojiWrapper'>
                     <button className='emojiBtn' onClick={() => {
                         setShowEmoji(state => !state)
-                    }}><EmojiPicker height={20} width={20} /></button>
-                    <button className='sendBtn' onClick={sendMessage}>Send</button>
+                    }}><InsertEmoticon /> </button>
+                    <button className='sendBtn' onClick={sendMessage}><Send /></button>
                 </div>
 
                 {showEmoji ? <div className={classes['emojiPicker']}><Picker onEmojiClick={onEmojiClick} /></div> : ''}
