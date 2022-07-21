@@ -138,6 +138,7 @@ const Chat = () => {
   const messageItems = chatData.map((ele, id) => {
     return (
       <ChatBubbleContainer
+      className={classes['msg']}
         timestamp={moment(ele.CreatedTimestamp).format("h:mm a")}
         key={id}
       >

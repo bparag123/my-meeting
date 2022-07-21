@@ -68,6 +68,11 @@
   right: 0;
 }
 
+.msg{
+  background-color: #D6EBFB !important;
+  margin: 2px;
+}
+
 .emojiBtn {
   background-color: transparent;
   border: none;
