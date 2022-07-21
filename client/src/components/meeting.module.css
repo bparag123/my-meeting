@@ -120,21 +120,6 @@
 .hidechat {
   display: none;
 }
-.showchat > div {
-  z-index: 100 !important;
-  height: 100% !important;
-  box-shadow: none !important;
-  position: fixed;
-  top: 0;
-  right: 0;
-}
-.showchat > div > div {
-  height: 70%;
-  width: 296px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-}
 
 .showchat > div > div > ul {
   height: 100%;
@@ -142,13 +127,6 @@
   background-color: #D6EBFB;
 }
 
-.showchat > div > div > div {
-  position: relative;
-}
-
-.showchat > div > div > div > input:first-child {
-  width: 100%;
-}
 @media (max-height: 600px) {
   .custom-grid > div {
     grid-auto-flow: row;

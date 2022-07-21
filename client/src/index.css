@@ -17,3 +17,10 @@ code {
   position: absolute !important;
   top: 3rem;
 }
+
+
+.MuiSvgIcon-root{
+  fill: #428bca !important;
+  width: 20px !important;
+  height: 20px !important;
+}

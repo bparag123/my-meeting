@@ -1,3 +1,19 @@
+.chatWrapper {
+  z-index: 100 !important;
+  height: 100% !important;
+  box-shadow: none !important;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+.chatFlex {
+  height: 70%;
+  width: 296px !important;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
 .emojiPicker {
   position: absolute;
   bottom: 80px;
@@ -5,5 +21,47 @@
 }
 
 .chatActionWrapper {
-  width: 100%;
+  position: relative;
 }
+
+.attach {
+  width: 100%;
+  padding: 6px 40px 6px 6px;
+  height: 40px;
+  font-size: 14px;  
+  font-weight: 500;
+}
+
+.attach:focus-visible {
+  outline: none;
+}
+
+.send:focus-visible {
+  outline: none;
+}
+
+.emojiWrapper {
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+
+.emojiBtn {
+  background-color: transparent;
+  border: none;
+}
+
+.emojiBtn:focus-visible {
+  outline: none;
+}
+
+.sendBtn {
+  background-color: transparent;
+  border: none;
+}
+
+.sendBtn:focus-visible {
+  outline: none;
+}
+
+
