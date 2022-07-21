@@ -1,34 +1,20 @@
-import React, { useLayoutEffect } from "react";
-import {
-  ChatBubble,
-  ChatBubbleContainer,
-  Flex,
-  EmojiPicker,
-  useMeetingManager,
-  InfiniteList,
-  MessageAttachment,
-} from "amazon-chime-sdk-component-library-react";
-import { useRef } from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import moment from "moment";
-import getChimeClient from "../utils/ChimeClient";
-import configureMessagingSession from "../utils/MessagingSession";
-import {
-  getPresignedUrl,
-  uploadFileToBucket,
-  getFileDownloadableUrl,
-} from "../utils/UploadAttachment";
-import formatBytes from "../utils/formatBytes";
-import Picker from "emoji-picker-react";
-import emojiParser from "../utils/emojiFormat";
-import classes from "./chat.module.css";
-import emojiRegex from "emoji-regex";
-import {
-  unicodeToCodepoint,
-  surrogatePairToCodePoint,
-  toUTF16,
-} from "../utils/emojis/emojiConverter";
+import React, { useLayoutEffect } from 'react';
+import { ChatBubble, ChatBubbleContainer, Flex, EmojiPicker, useMeetingManager, InfiniteList, MessageAttachment } from 'amazon-chime-sdk-component-library-react'
+import { useRef } from 'react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux'
+import moment from 'moment'
+import getChimeClient from '../utils/ChimeClient'
+import configureMessagingSession from '../utils/MessagingSession';
+import { getPresignedUrl, uploadFileToBucket, getFileDownloadableUrl } from '../utils/UploadAttachment';
+import formatBytes from '../utils/formatBytes';
+import Picker from 'emoji-picker-react'
+import emojiParser from '../utils/emojiFormat';
+
+import { AttachFile, Send, InsertEmoticon } from '@mui/icons-material';
+import classes from './chat.module.css'
+import emojiRegex from 'emoji-regex'
+import { unicodeToCodepoint, surrogatePairToCodePoint, toUTF16 } from '../utils/emojis/emojiConverter'
 
 const Chat = () => {
   const msgRef = useRef(null);
@@ -202,10 +188,10 @@ const Chat = () => {
                 setShowEmoji((state) => !state);
               }}
             >
-              <EmojiPicker height={20} width={20} />
+              <InsertEmoticon /> 
             </button>
             <button className="sendBtn" onClick={sendMessage}>
-              Send
+            <Send />
             </button>
           </div>
         </div>
