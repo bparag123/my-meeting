@@ -174,10 +174,12 @@ const Chat = () => {
           isLoading={false}
           css="height: 50vh"
         />
+
         <div className={classes["chatActionWrapper"]}>
           <input className={classes["attach"]} type="text" ref={msgRef} />
           <input
             className={classes["send"]}
+
             type="file"
             accept="file_extension|audio/*|video/*|image/*|media_type"
             ref={fileRef}
@@ -185,6 +187,7 @@ const Chat = () => {
           <div className={classes["emojiWrapper"]}>
             <button
               className={classes["emojiBtn"]}
+
               onClick={() => {
                 setShowEmoji((state) => !state);
               }}
@@ -193,6 +196,7 @@ const Chat = () => {
             </button>
             <button className={classes["sendBtn"]} onClick={sendMessage}>
             <Send/>
+
             </button>
           </div>
         </div>
