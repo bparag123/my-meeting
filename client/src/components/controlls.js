@@ -15,16 +15,20 @@ import {
   Attendees,
   Meeting,
   Chat,
+  useVideoInputs,
+  useAudioInputs,
 } from 'amazon-chime-sdk-component-library-react';
 import { useState } from 'react';
 import axios from 'axios';
 import setupWhiteboard from '../utils/setupWhiteboard';
 import { useSelector, useDispatch } from 'react-redux';
 import transcriptConfig from '../store/slices/transcription'
+import { useNavigate } from 'react-router-dom';
 
 export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, showParticipants, setParticipants, showChat, setChat }) => {
 
   const [muted, setMuted] = useState(false);
+  const navigate = useNavigate()
   const [screenShared, setScreenShared] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const isTranscripting = useSelector(state => state.transcriptConfig.active)
@@ -32,6 +36,8 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
   const { isVideoEnabled, setIsVideoEnabled } = useLocalVideo()
   const [MediaPipelineId, setMediaPipelineId] = useState("")
   const dispatch = useDispatch()
+  const { selectedDevice } = useVideoInputs()
+  const { selectedDevice: AudioSeletedDevice } = useAudioInputs()
   let localUserName = "";
   console.log(meetingManager)
   //Getting Local Username
@@ -51,11 +57,13 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
         <Microphone height={30} width={30} />
       </span>
     ),
-    onClick: () => {
+    onClick: async () => {
       setMuted(!muted);
       if (!muted) {
+        await meetingManager.audioVideo.stopAudioInput()
         meetingManager.audioVideo.realtimeMuteLocalAudio();
       } else {
+        await meetingManager.audioVideo.startAudioInput(AudioSeletedDevice)
         meetingManager.audioVideo.realtimeUnmuteLocalAudio();
       }
     },
@@ -76,9 +84,11 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
     ),
     onClick: async () => {
       if (isVideoEnabled) {
+        await meetingManager.audioVideo.stopVideoInput()
         meetingManager.audioVideo.stopLocalVideoTile();
         setIsVideoEnabled(false);
       } else {
+        await meetingManager.audioVideo.startVideoInput(selectedDevice);
         setIsVideoEnabled(true);
         meetingManager.audioVideo.startLocalVideoTile();
       }
@@ -120,12 +130,13 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
     ),
     onClick: async () => {
       setShowWhiteBoard((_) => false);
-
+      const mId = meetingManager.meetingId
       const response = await axios.delete(`
             https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/${meetingManager.meetingId}`);
       console.log(response.status);
-      if (response.status === 204) {
+      if (response.status === 200) {
         console.log("Ending Meeting");
+        navigate(`/dashboard/${mId}`, { replace: true })
       }
     },
     label: "End",
