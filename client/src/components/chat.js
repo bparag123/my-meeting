@@ -12,7 +12,7 @@ import Picker from 'emoji-picker-react'
 import emojiParser from '../utils/emojiFormat';
 
 import { AttachFile, Send, InsertEmoticon } from '@mui/icons-material';
-import classes from './chat.module.css'
+import classes from './chat.module.css' 
 import emojiRegex from 'emoji-regex'
 import { unicodeToCodepoint, surrogatePairToCodePoint, toUTF16 } from '../utils/emojis/emojiConverter'
 
@@ -165,33 +165,38 @@ const Chat = () => {
   };
 
   return (
-    <div className="chatWrapper">
-      <Flex className="ChatFlex" layout="stack" css={containerStyles}>
+    <div className={classes["chatWrapper"]}>
+      <Flex className={classes["chatFlex"]} layout="stack" css={containerStyles}>
         <InfiniteList
+        className={classes["chatUl"]}
           items={messageItems}
           onLoad={() => {}}
           isLoading={false}
           css="height: 50vh"
         />
-        <div className="chatActionWrapper">
-          <input className="attach" type="text" ref={msgRef} />
+
+        <div className={classes["chatActionWrapper"]}>
+          <input className={classes["attach"]} type="text" ref={msgRef} />
           <input
-            className="send"
+            className={classes["send"]}
+
             type="file"
             accept="file_extension|audio/*|video/*|image/*|media_type"
             ref={fileRef}
           />
-          <div className="emojiWrapper">
+          <div className={classes["emojiWrapper"]}>
             <button
-              className="emojiBtn"
+              className={classes["emojiBtn"]}
+
               onClick={() => {
                 setShowEmoji((state) => !state);
               }}
             >
-              <InsertEmoticon />
+              <InsertEmoticon /> 
             </button>
-            <button className="sendBtn" onClick={sendMessage}>
-              <Send />
+            <button className={classes["sendBtn"]} onClick={sendMessage}>
+            <Send/>
+
             </button>
           </div>
         </div>
