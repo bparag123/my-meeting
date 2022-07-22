@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import { Controlls } from "./controlls";
 import MeetingView from "./meeting.js";
 import setupMeeting from "../utils/setupMeeting";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import "./../layout/createMeeting.scss";
 import { useDispatch, useSelector } from "react-redux";
 import chatConfigSlice from '../store/slices/chatConfig'
@@ -21,19 +21,24 @@ function JoinMeeting() {
   const [showChat, setChat] = useState(false);
   const [joined, setIsJoined] = useState(false);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
-    switch (name) {
-      case "meetingStartSucceeded":
-        setIsJoined((_) => true);
-        break;
-      case "meetingEnded":
-        setIsJoined((_) => false);
-        break;
-      default:
-        console.log("Default");
-    }
-  });
+  useEffect(() => {
+    meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
+      switch (name) {
+        case "meetingStartSucceeded":
+          setIsJoined((_) => true);
+          break;
+        case "meetingEnded":
+          setIsJoined((_) => false);
+          console.log("Ended ", meetingId)
+          navigate(`/dashboard/${meetingId}`, { replace: true })
+          break;
+        default:
+          console.log("Default");
+      }
+    });
+  }, [])
 
   useEffect(() => {
     setAudioDev((_) => audioEle.current);

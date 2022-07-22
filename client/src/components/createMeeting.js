@@ -9,6 +9,7 @@ import './../layout/createMeeting.scss';
 import { ReactComponent as CopyIcon } from './../images/copy.svg';
 import { useDispatch, useSelector } from 'react-redux'
 import chatConfigSlice from "../store/slices/chatConfig";
+import { useNavigate } from "react-router-dom";
 
 function CreateMeeting() {
   const meetingManager = useMeetingManager();
@@ -20,23 +21,25 @@ function CreateMeeting() {
   const [showParticipants, setParticipants] = useState(false);
   const [showChat, setChat] = useState(false);
   const [invitationLink, setInvitationLink] = useState("");
-
   const chatConfig = useSelector((state) => state.chatConfig)
   const dispatch = useDispatch()
 
-  meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
-    switch (name) {
-      case "meetingStartSucceeded":
-        setInvitationLink((_) => meetingManager.meetingId);
-        break;
-      case "meetingEnded":
-        setInvitationLink((_) => "");
-        break;
-      default:
-        console.log("Default");
-    }
-    console.log(name, attribiutes);
-  });
+  useEffect(() => {
+    meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
+      switch (name) {
+        case "meetingStartSucceeded":
+          setInvitationLink((_) => meetingManager.meetingId);
+          break;
+        case "meetingEnded":
+          setInvitationLink((_) => "");
+          console.log("Ended ")
+          break;
+        default:
+          console.log("Default");
+      }
+      console.log(name, attribiutes);
+    });
+  }, [])
 
   useEffect(() => {
     setAudioDev((_) => audioEle.current);
@@ -111,16 +114,7 @@ function CreateMeeting() {
       )}
       <div className="mainMeeting">
 
-      <MeetingView
-        meetingManager={meetingManager}
-        showWhiteBoard={showWhiteBoard}
-        setShowWhiteBoard={setShowWhiteBoard}
-        showParticipants={showParticipants}
-        setParticipants={setParticipants}
-        setChat={setChat}
-        showChat={showChat}
-      >
-        <Controlls
+        <MeetingView
           meetingManager={meetingManager}
           showWhiteBoard={showWhiteBoard}
           setShowWhiteBoard={setShowWhiteBoard}
@@ -128,11 +122,20 @@ function CreateMeeting() {
           setParticipants={setParticipants}
           setChat={setChat}
           showChat={showChat}
-        />
+        >
+          <Controlls
+            meetingManager={meetingManager}
+            showWhiteBoard={showWhiteBoard}
+            setShowWhiteBoard={setShowWhiteBoard}
+            showParticipants={showParticipants}
+            setParticipants={setParticipants}
+            setChat={setChat}
+            showChat={showChat}
+          />
 
-      </MeetingView>
-      <ToastContainer />
-    </div>
+        </MeetingView>
+        <ToastContainer />
+      </div>
     </div>
   );
 }

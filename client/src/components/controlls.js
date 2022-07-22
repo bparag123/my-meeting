@@ -133,6 +133,10 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
     onClick: async () => {
       setShowWhiteBoard((_) => false);
       const mId = meetingManager.meetingId
+      console.log(mId)
+      axios.get(`https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/getTranscription/${mId}`)
+      await axios.get(`https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/getRecording/${mId}`)
+      console.log("Request Sent")
       const response = await axios.delete(`
             https://iaz55f28ph.execute-api.us-east-1.amazonaws.com/dev/meetings/${meetingManager.meetingId}`);
       console.log(response.status);
@@ -208,10 +212,10 @@ export const Controlls = ({ meetingManager, showWhiteBoard, setShowWhiteBoard, s
         if (whiteboardId === "") {
           setupWhiteboard(whiteboard.data.WhiteboardId, localUserName);
           dispatch(whiteboardConfig.actions.setWhiteboard({
-          whiteboardId: whiteboard.data.WhiteboardId
-        }))
+            whiteboardId: whiteboard.data.WhiteboardId
+          }))
         }
-        
+
         meetingManager.audioVideo.realtimeSendDataMessage("showWhiteboard", {
           display: !showWhiteBoard,
           roomId: whiteboard.data.WhiteboardId,

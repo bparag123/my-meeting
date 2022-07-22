@@ -35,10 +35,10 @@ const Dashboard = () => {
               <p>End Time : <span>{meetingData.data.EndTime}</span></p>
             </div>
             <div className="meetingJoiners">
-              <h4>Attendees</h4>
+              <h4>Participants</h4>
               <ul>
-                {meetingData.data.Attendees.map((ele) => {
-                  return <li>{ele.ExternalUserId}</li>;
+                {meetingData.data.Attendees.map((ele, i) => {
+                  return <li key={i}>{ele.ExternalUserId}</li>;
                 })}
               </ul>
             </div>

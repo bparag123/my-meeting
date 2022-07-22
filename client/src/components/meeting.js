@@ -20,6 +20,8 @@ import Participants from "./roster";
 import { isVideoTransformDevice } from "amazon-chime-sdk-js";
 import Chat from "./chat";
 import Transcription from './transcription'
+import { useNavigate } from "react-router-dom";
+
 
 const MeetingView = ({
   children,
@@ -40,19 +42,22 @@ const MeetingView = ({
   const { isVideoEnabled } = useLocalVideo()
   // const roster = useRosterState();
   const [showControlls, setShowControlls] = useState(false);
-  meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
-    switch (name) {
-      case "meetingStartSucceeded":
-        setShowControlls((_) => true);
-        break;
-      case "meetingEnded":
-        setShowControlls((_) => false);
-        break;
-      default:
-        console.log("Default");
-    }
-    console.log(name, attribiutes);
-  });
+  const navigate = useNavigate()
+  useEffect(() => {
+    meetingManager.subscribeToEventDidReceive((name, attribiutes) => {
+      switch (name) {
+        case "meetingStartSucceeded":
+          setShowControlls((_) => true);
+          break;
+        case "meetingEnded":
+          setShowControlls((_) => false);
+          navigate(`/dashboard/${attribiutes.meetingId}`, { replace: true })
+          break;
+        default:
+          console.log("Default");
+      }
+    });
+  }, [])
 
   let videos = [];
 
@@ -83,9 +88,9 @@ const MeetingView = ({
   //Modifying Visibility of Whiteboard
   const x = document.querySelector("#comet-container");
   if (showWhiteBoard) {
-    x.style["visibility"] = "visible";
+    x.style["display"] = "block";
   } else {
-    x.style["visibility"] = "hidden";
+    x.style["display"] = "none";
   }
 
   const onClick = () => {
