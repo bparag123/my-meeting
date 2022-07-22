@@ -1,0 +1,73 @@
+@import "./variables";
+
+* {
+    margin: 0;
+}
+
+.meetingInfo {
+    padding: 30px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    .meetingInfoWrapper {
+        max-width: 1440px;
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .meetingHead {
+        margin-bottom: 30px;
+        h1 {
+            font-size: 30px;
+            color: $color-black;
+        }
+    }
+    .meetingOrganizer {
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: 600;
+        color: $color-red;
+    }
+    .meetingTiming {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        p {
+            padding: 0 10px;
+            &:first-child {
+                border-right: 1px solid $color-grey;
+            }
+        }
+    } 
+    .meetingJoiners {
+        margin-bottom: 20px;
+        max-width: 495px;   
+        width: 100%;
+        h4 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            color: $color-red;
+            text-align: center;
+        }
+        ul {
+            max-height: 100px;
+            max-width: 495px;   
+            width: 100%;
+            overflow: auto;
+            padding: 0;
+            columns: 4;
+            text-align: center;
+            li {
+                margin-bottom: 10px;
+                list-style-type: none;
+            }
+        }
+    }
+}
