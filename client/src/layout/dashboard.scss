@@ -51,6 +51,10 @@
         font-weight: 500;
         margin-bottom: 20px;
         p {
+            span{
+                display: block;
+                margin-top: 5px;
+            }
             padding: 0 10px;
             &:first-child {
                 border-right: 1px solid $color-grey;
@@ -90,6 +94,10 @@
     }
     .meetingTranscription {
         margin-block: 20px 15px;
+        h6{
+            font-size: 1rem;
+            font-weight: 400;
+        }
         div {
             span {
                 font-weight: 600;

@@ -7,11 +7,6 @@ const Dashboard = () => {
   const { meetingId } = useParams();
   const [meetingData, setMeetingData] = useState(undefined);
 
-  // Only send the meeting id on transcript error.
-  // Delete this line after the backend is fixed.
-  meetingData.transcript.error = "59570d84-165b-4bab-a7c5-5f3801022713";
-
-
   useEffect(() => {
     const getMetadata = async () => {
       const result = await axios.get(
@@ -20,6 +15,7 @@ const Dashboard = () => {
       console.log(result);
       setMeetingData((_) => result.data);
     };
+
     getMetadata();
   }, []);
 
@@ -32,11 +28,11 @@ const Dashboard = () => {
               <h1>{meetingData.data.MeetingTitle}</h1>
             </div>
             <div className="meetingOrganizer">
-             Organized By {meetingData.data.Organizer}
+              Organized By {meetingData.data.Organizer}
             </div>
             <div className="meetingTiming">
-              <p>Start Time : {meetingData.data.StartTime}</p>
-              <p>End Time : {meetingData.data.EndTime}</p>
+              <p>Start Time : <span>{meetingData.data.StartTime}</span></p>
+              <p>End Time : <span>{meetingData.data.EndTime}</span></p>
             </div>
             <div className="meetingJoiners">
               <h4>Attendees</h4>
