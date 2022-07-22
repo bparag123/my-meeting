@@ -7,8 +7,9 @@
 .meetingInfo {
     padding: 30px;
     height: 100vh;
-    display: flex;
-    align-items: center;
+    display: grid;
+    justify-content: center;
+    align-content: center;
     .meetingInfoWrapper {
         max-width: 1440px;
         width: 100%;
@@ -18,19 +19,30 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding: 50px;
+        color: $color-dark;
+        background-color: #fafafa;
+        box-shadow: 0px 0px 100px rgba(0,0,0,0.1);
+        border-radius: 30px;
+        text-align:center;
+        color: $color-gray;
     }
     .meetingHead {
         margin-bottom: 30px;
         h1 {
-            font-size: 30px;
-            color: $color-black;
+            font-size: 35px;
+            color: $color-primary;
+            text-transform: capitalize;
+            display: inline-block;
+            position: relative;
         }
     }
     .meetingOrganizer {
         margin-bottom: 20px;
         font-size: 20px;
         font-weight: 600;
-        color: $color-red;
+        color: $color-blue-db-text;
+        text-transform: capitalize;
     }
     .meetingTiming {
         display: flex;
@@ -46,28 +58,62 @@
         }
     } 
     .meetingJoiners {
-        margin-bottom: 20px;
+        margin-block: 20px;
         max-width: 495px;   
         width: 100%;
+        padding: 20px;
+        background-color: $color-blue-db-bg;
+        border-radius: 15px;
         h4 {
             margin-bottom: 20px;
             font-size: 20px;
             font-weight: 600;
-            color: $color-red;
+            color: $color-blue-db-text;
             text-align: center;
         }
         ul {
-            max-height: 100px;
             max-width: 495px;   
             width: 100%;
             overflow: auto;
             padding: 0;
             columns: 4;
             text-align: center;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             li {
-                margin-bottom: 10px;
+                padding-block: 5px;
                 list-style-type: none;
+                color: $color-dark;
             }
+        }
+    }
+    .meetingTranscription {
+        margin-block: 20px 15px;
+        div {
+            span {
+                font-weight: 600;
+                color: $color-primary;
+            }
+        }
+    }
+    .meetingRecording {
+        span {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        p {
+            font-style: italic;
+            color: $color-gray;
+        }
+    }
+    .meetingTranscription, .meetingRecording {
+        margin-bottom: 10px;
+        a {
+            color: $color-primary;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
         }
     }
 }

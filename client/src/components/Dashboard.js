@@ -7,6 +7,11 @@ const Dashboard = () => {
   const { meetingId } = useParams();
   const [meetingData, setMeetingData] = useState(undefined);
 
+  // Only send the meeting id on transcript error.
+  // Delete this line after the backend is fixed.
+  meetingData.transcript.error = "59570d84-165b-4bab-a7c5-5f3801022713";
+
+
   useEffect(() => {
     const getMetadata = async () => {
       const result = await axios.get(
@@ -41,21 +46,21 @@ const Dashboard = () => {
                 })}
               </ul>
             </div>
-            <div>
+            <div className="meetingTranscription">
               {meetingData.transcript.transcriptURL ? (
                 <h6>
                   Transcription Of This Meeting{" "}
                   <a href={meetingData.transcript.transcriptURL}>here</a>
                 </h6>
               ) : (
-                <div>{meetingData.transcript.error}</div>
+                <div>Transcription not found in meeting Id <span>{meetingData.transcript.error}</span></div>
               )}
             </div>
-            <div>
+            <div className="meetingRecording">
               {meetingData.recording.recordingURL ? (
                 <div>
                   <span>
-                    recording Of This Meeting{" "}
+                    Recording of this meeting is availabe{" "}
                     <a href={meetingData.recording.recordingURL}>here</a>
                   </span>
                   <p>(It might take some to view recording video)</p>{" "}
